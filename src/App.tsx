@@ -1,11 +1,10 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import Index from './pages/Index';
 
-function App() {
-  return (
-    <div className="App">
-      <div>Hello React</div>
-    </div>
-  );
-}
-
-export default App;
+ReactDOM.render(
+  <React.StrictMode>
+    <Index />
+  </React.StrictMode>,
+  document.getElementById('react')
+);

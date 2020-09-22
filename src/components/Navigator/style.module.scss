@@ -1,0 +1,54 @@
+@import "./../../style/color.scss";
+
+.navigator {
+  margin-bottom: 10px;
+  ul {
+    margin: 0px;
+    padding: 0px 20px;
+    list-style-type: none;
+    li {
+      background-color: $bg1color;
+      //border: 2px solid $fontcolor;
+      border-radius: 2px;
+      padding: 3px 10px;
+      margin: 1px 5px;
+      float: left;
+      a {
+        color: $fonthyperlink1;
+        text-decoration: underline solid;
+      }
+      a:hover {
+        color: $fonthyperlinkhover1;
+        text-decoration: underline double;
+      }
+    }
+    li.right {
+      float: right;
+    }
+    li:last-child {
+      border: none;
+      padding: 0px;
+      margin: 0px;
+      float: none;
+      clear: both;
+    }
+
+    #searchbox {
+      padding: 1px 5px;
+      label {
+        padding-right: 5px;
+      }
+
+      .input {
+        border-width: 1px;
+        padding: 0px;
+        height: 24px;
+      }
+      .button {
+        border-width: 0px;
+        padding: 3px;
+        height: 24px;
+      }
+    }
+  }
+}

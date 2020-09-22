@@ -1,0 +1,12 @@
+@import "./../../style/color.scss";
+
+.header {
+  background-color: $bg1color;
+  padding: 30px;
+  margin-bottom: 10px;
+  h1 {
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 5px;
+  }
+}

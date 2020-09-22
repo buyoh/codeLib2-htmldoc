@@ -1,0 +1,10 @@
+@import "./../../style/color.scss";
+
+.footer {
+  .version {
+    text-align: right;
+    font-style: italic;
+    font-size: small;
+  }
+  margin-bottom: 200px;
+}

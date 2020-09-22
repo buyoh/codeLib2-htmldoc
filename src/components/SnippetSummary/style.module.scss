@@ -1,0 +1,30 @@
+@import "./../../style/color.scss";
+
+.item {
+  border-bottom: 1px dashed $accentcolor1;
+  .title {
+    border-left: 5px solid $accentcolor1;
+    padding-left: 8px;
+    font-weight: bolder;
+    font-size: large;
+  }
+  .path {
+    font-style: italic;
+    font-size: small;
+    margin-left: 30px;
+  }
+  .keyword {
+    font-style: italic;
+    font-size: small;
+    margin-left: 30px;
+  }
+  .datetime {
+    font-style: italic;
+    font-size: small;
+  }
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+.item:last-child {
+  border-bottom: none;
+}
