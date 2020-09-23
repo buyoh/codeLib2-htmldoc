@@ -1,0 +1,36 @@
+AllCops:
+  TargetRubyVersion: 2.7
+  Exclude:
+    - 'node_modules/**/*'
+
+AsciiComments:
+  Enabled: false
+
+Style/StderrPuts:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+  Max: 60
+
+Metrics/BlockLength:
+  Enabled: false
+
+Naming/FileName:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+# https://docs.rubocop.org/rubocop/cops_metrics.html
+# Metrics/AbcSize:
+#   Max: 33
+
+# Metrics/CyclomaticComplexity:
+#   Max: 8
+
+# Metrics/PerceivedComplexity:
+#   Exclude:
+
+Lint/EmptyWhen:
+  Enabled: false

@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Index from './pages/Index';
+import { Provider } from 'react-redux';
+import { rootStore } from './stores';
+import Index from './containers/Index';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Index />
+    <Provider store={rootStore}>
+      <Index />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('react')
 );
