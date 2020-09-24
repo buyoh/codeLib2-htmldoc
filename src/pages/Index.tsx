@@ -74,7 +74,7 @@ class Index extends React.Component<CombinedProps, State> {
           <h1>一覧</h1>
           <SnippetSummaryList>
             {this.props.codeLibItems ? this.props.codeLibItems.map(item => (
-              <SnippetSummary title={item.title} path={item.path} keywords={item.words} date='2020/01/01' key={item.path} />
+              <SnippetSummary title={item.title} path={item.path} keywords={item.words || []} date='2020/01/01' key={item.path} />
             )) : null}
           </SnippetSummaryList>
         </div>

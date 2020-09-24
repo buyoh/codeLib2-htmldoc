@@ -1,18 +1,7 @@
 import { CodeLibState, CodeLibActionTypes, ADD_ITEMS } from './types';
 
 const initialState: CodeLibState = {
-  items: [
-    {
-      title: 'string',
-      overview: 'string',
-      verified: 'string',
-      references: ['string'],
-      words: ['a', 'b'],
-      require: [],
-      code: 'string',
-      path: 'string',
-    }
-  ]
+  items: []
 };
 
 export function codeLibReducer(
