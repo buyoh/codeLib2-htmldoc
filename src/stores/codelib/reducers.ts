@@ -1,13 +1,12 @@
-import { CodeLibState, CodeLibActionTypes, ADD_ITEM } from './types';
+import { CodeLibState, CodeLibActionTypes, ADD_ITEMS } from './types';
 
 const initialState: CodeLibState = {
   items: [
     {
       title: 'string',
       overview: 'string',
-      usage: 'string',
       verified: 'string',
-      references: 'string',
+      references: ['string'],
       words: ['a', 'b'],
       require: [],
       code: 'string',
@@ -20,9 +19,9 @@ export function codeLibReducer(
   state = initialState,
   action: CodeLibActionTypes): CodeLibState {
   switch (action.type) {
-    case ADD_ITEM:
+    case ADD_ITEMS:
       return {
-        items: [...state.items, action.item]
+        items: [...state.items, ...action.items]
       };
     default:
       return state;

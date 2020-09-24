@@ -1,8 +1,9 @@
-import { ADD_ITEM, CodeLibActionTypes, CodeLibItem } from './types';
+import { CodeLibItem } from '../../lib/CodeLib/types';
+import { ADD_ITEMS, CodeLibActionTypes } from './types';
 
-export function addItem(item: CodeLibItem): CodeLibActionTypes {
+export function addItems(items: Array<CodeLibItem>): CodeLibActionTypes {
   return {
-    type: ADD_ITEM,
-    item
+    type: ADD_ITEMS,
+    items
   };
 }

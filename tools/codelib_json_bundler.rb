@@ -36,5 +36,16 @@ end
 require 'json'
 require @codelib_path + '/tools/collector/collector.rb'
 
-# IO.write @output_path + '/codelib_full.json', JSON.generate(Document.collect_documents(@codelib_path))
-IO.write @output_path + '/codelib_full.json', JSON.pretty_generate(Document.collect_documents(@codelib_path))
+docs = Document.collect_documents(@codelib_path)
+
+docs.map! do |article|
+  article['words'] = (article['words'] || '').split(',')
+  # たぶん、改行区切り
+  article['require'] = (article['require'] || '').split("\n")
+  article['references'] = (article['references'] || '').split("\n")
+
+  article
+end
+
+# IO.write @output_path + '/codelib_full.json', JSON.generate(docs)
+IO.write @output_path + '/codelib_full.json', JSON.pretty_generate(docs)

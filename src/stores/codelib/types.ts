@@ -1,24 +1,14 @@
-export interface CodeLibItem {
-  'title': string,
-  'overview': string,
-  'usage': string,
-  'verified': string,
-  'references': string,
-  'words': Array<string>,
-  'require': Array<string>,
-  'code': string,
-  'path': string,
-}
+import { CodeLibItem } from '../../lib/CodeLib/types';
 
 export interface CodeLibState {
   'items': Array<CodeLibItem>
 }
 
-export const ADD_ITEM = 'aaaaa';
+export const ADD_ITEMS = 'codelib-additems';
 
-interface AddCodeLibItemAction {
-  type: typeof ADD_ITEM
-  item: CodeLibItem
+interface AddCodeLibItemsAction {
+  type: typeof ADD_ITEMS
+  items: Array<CodeLibItem>
 }
 
-export type CodeLibActionTypes = AddCodeLibItemAction
+export type CodeLibActionTypes = AddCodeLibItemsAction

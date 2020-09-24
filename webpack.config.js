@@ -1,9 +1,8 @@
-
 module.exports = {
   mode: 'development',
   entry: './src/App.tsx',
   output: {
-    path: __dirname + '/public',
+    path: __dirname + '/public/',
     filename: 'bundle.js'
   },
   module: {
