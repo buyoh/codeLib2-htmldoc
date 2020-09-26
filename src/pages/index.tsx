@@ -6,7 +6,7 @@ import { RootState } from '../stores';
 import { CodeLibArticle } from '../lib/CodeLib/types';
 import * as CodeLibActions from '../stores/codelib/actions';
 import CodeLib from '../lib/CodeLib';
-import SideSearchFrame from '../containers/SideSearchFrame/';
+import SideSearchFrame from '../containers/SideSearchFrame';
 import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
 
 //

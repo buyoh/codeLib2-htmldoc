@@ -1,14 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { rootStore } from './stores';
-import Index from './pages';
 
-ReactDOM.render(
+const WrapWithProvider = ({ element }: { element: JSX.Element | JSX.Element[] }): JSX.Element => (
   <React.StrictMode>
     <Provider store={rootStore}>
-      <Index />
+      {element}
     </Provider>
-  </React.StrictMode>,
-  document.getElementById('react')
+  </React.StrictMode>
 );
+
+export default WrapWithProvider;
+
