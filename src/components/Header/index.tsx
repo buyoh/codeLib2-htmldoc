@@ -16,7 +16,7 @@ class Header extends React.Component<Props, State> {
   render(): JSX.Element {
     return (
       <div className={Styles.header}>
-        <h1>doc-codelib2</h1>
+        <div className={Styles.title}>doc-codelib2</div>
       </div>
     );
   }

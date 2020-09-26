@@ -1,14 +1,14 @@
-import { CodeLibItem } from '../../lib/CodeLib/types';
+import { CodeLibArticle } from '../../lib/CodeLib/types';
 
 export interface CodeLibState {
-  'items': Array<CodeLibItem>
+  'items': Array<CodeLibArticle>
 }
 
-export const ADD_ITEMS = 'codelib-additems';
+export const SET_ITEMS = 'codelib-setitems';
 
-interface AddCodeLibItemsAction {
-  type: typeof ADD_ITEMS
-  items: Array<CodeLibItem>
+interface AddCodeLibArticlesAction {
+  type: typeof SET_ITEMS
+  items: Array<CodeLibArticle>
 }
 
-export type CodeLibActionTypes = AddCodeLibItemsAction
+export type CodeLibActionTypes = AddCodeLibArticlesAction

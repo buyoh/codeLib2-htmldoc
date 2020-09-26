@@ -1,0 +1,22 @@
+@import "./../../style/color.scss";
+
+.item {
+  border-bottom: 1px dashed $accentcolor1;
+  .title {
+    // border-left: 5px solid $accentcolor1;
+    padding-left: 8px;
+    // font-weight: bolder;
+  }
+  .path {
+    font-style: italic;
+    font-size: 0.8em;
+    margin-left: 2em;
+  }
+  // margin-top: 0.5em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  // margin-bottom: 0.25em;
+}
+.item:last-child {
+  border-bottom: none;
+}

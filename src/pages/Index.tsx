@@ -1,15 +1,13 @@
 import React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import Header from '../components/Header';
-import Navigator from '../components/Navigator';
-import SnippetSummary from '../components/SnippetSummary';
-import SnippetSummaryList from '../components/SnippetSummaryList';
-import '../style/style.scss';
+import '../style/style-screen.scss';
 import { RootState } from '../stores';
-import { CodeLibItem } from '../lib/CodeLib/types';
+import { CodeLibArticle } from '../lib/CodeLib/types';
 import * as CodeLibActions from '../stores/codelib/actions';
 import CodeLib from '../lib/CodeLib';
+import SideSearchFrame from '../containers/SideSearchFrame/';
+import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
 
 //
 
@@ -17,16 +15,17 @@ type Props = {
 }
 
 type State = {
+  visibleArticle: CodeLibArticle | null,  // TODO: 疲れたので適当 全ての状態をRedux化すべきだろうか？
 }
 
 //
 
 type StateProps = {
-  codeLibItems: Array<CodeLibItem>
+  codeLibArticles: Array<CodeLibArticle>
 }
 
 type DispatchProps = {
-  onFetchCodeLibData: (items: Array<CodeLibItem>) => void
+  onFetchCodeLibData: (items: Array<CodeLibArticle>) => void
 }
 
 type CombinedProps = Props & StateProps & DispatchProps;
@@ -35,13 +34,13 @@ type CombinedProps = Props & StateProps & DispatchProps;
 
 function mapStateToProps(state: RootState): StateProps {
   return {
-    codeLibItems: state.codeLib.items
+    codeLibArticles: state.codeLib.items
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
-    onFetchCodeLibData: (items: Array<CodeLibItem>) => dispatch(CodeLibActions.addItems(items))
+    onFetchCodeLibData: (items: Array<CodeLibArticle>) => dispatch(CodeLibActions.setItems(items))
   };
 }
 
@@ -51,7 +50,7 @@ class Index extends React.Component<CombinedProps, State> {
   constructor(props: CombinedProps) {
     super(props);
     console.log(this.state);
-    this.state = {};
+    this.state = { visibleArticle: null };
   }
 
   componentDidMount(): void {
@@ -67,18 +66,15 @@ class Index extends React.Component<CombinedProps, State> {
 
   render(): JSX.Element {
     return (
-      <div id='bodywrapper'>
-        <Header />
-        <Navigator />
-        <div id='main'>
-          <h1>一覧</h1>
-          <SnippetSummaryList>
-            {this.props.codeLibItems ? this.props.codeLibItems.map(item => (
-              <SnippetSummary title={item.title} path={item.path} keywords={item.words || []} date='2020/01/01' key={item.path} />
-            )) : null}
-          </SnippetSummaryList>
+      <div id='bodywrapper' className='cols'>
+        <div className='flex row nooverflow' >
+          {/* TODO: 疲れたので適当 */}
+          <SideSearchFrame onSelectArticle={(p) => { this.setState(Object.assign({}, this.state, { visibleArticle: this.props.codeLibArticles.find(a => a.path == p) })); }} />
+          <div className='flex scrollableY'>
+            {this.state.visibleArticle ? <CodeLibArticleViewer article={this.state.visibleArticle} /> : 'おもち'}
+          </div>
         </div>
-      </div>
+      </div >
     );
   }
 }

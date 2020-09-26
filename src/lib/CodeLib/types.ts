@@ -1,7 +1,7 @@
 import * as t from 'io-ts';
 import { checkType } from '../helper/checkType';
 
-const codeLibItem = t.type({
+const codeLibArticle = t.type({
   'title': t.string,
   'overview': t.string,
   'code': t.string,
@@ -12,5 +12,5 @@ const codeLibItem = t.type({
   'require': t.union([t.undefined, t.array(t.string)]),
 });
 
-export type CodeLibItem = t.TypeOf<typeof codeLibItem>;
-export const checkCodeLibItem = checkType.bind(this, codeLibItem);
+export type CodeLibArticle = t.TypeOf<typeof codeLibArticle>;
+export const checkCodeLibArticle = checkType.bind(this, codeLibArticle);

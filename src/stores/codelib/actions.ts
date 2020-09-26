@@ -1,9 +1,9 @@
-import { CodeLibItem } from '../../lib/CodeLib/types';
-import { ADD_ITEMS, CodeLibActionTypes } from './types';
+import { CodeLibArticle } from '../../lib/CodeLib/types';
+import { SET_ITEMS, CodeLibActionTypes } from './types';
 
-export function addItems(items: Array<CodeLibItem>): CodeLibActionTypes {
+export function setItems(items: Array<CodeLibArticle>): CodeLibActionTypes {
   return {
-    type: ADD_ITEMS,
+    type: SET_ITEMS,
     items
   };
 }
