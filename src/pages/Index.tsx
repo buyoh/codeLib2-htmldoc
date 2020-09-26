@@ -49,14 +49,11 @@ function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
 class Index extends React.Component<CombinedProps, State> {
   constructor(props: CombinedProps) {
     super(props);
-    console.log(this.state);
     this.state = { visibleArticle: null };
   }
 
   componentDidMount(): void {
-    console.log('componentDidMount');
     (async () => {
-      console.log('fetch start');
       const items = await CodeLib.fetchAll();
       this.props.onFetchCodeLibData(items);
     })();

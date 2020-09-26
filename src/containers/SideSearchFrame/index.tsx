@@ -68,7 +68,6 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
 
   componentDidMount(): void {
     (async () => {
-      console.log('fetch start');
       const items = await CodeLib.fetchAll();
       this.props.onFetchCodeLibData(items);
     })();
