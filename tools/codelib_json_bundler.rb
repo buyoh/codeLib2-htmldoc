@@ -34,15 +34,18 @@ unless Dir.exist?(@output_path)
 end
 
 require 'json'
+require 'pathname'
 require @codelib_path + '/tools/collector/collector.rb'
 
 docs = Document.collect_documents(@codelib_path)
 
 docs.map! do |article|
-  article['words'] = (article['words'] || '').split(',')
+  article[:words] = (article[:words] || '').split(',')
+  p article.keys
+  article[:path] = Pathname.new(File.absolute_path(article[:path])).relative_path_from(@codelib_path) if article[:path]
   # たぶん、改行区切り
-  article['require'] = (article['require'] || '').split("\n")
-  article['references'] = (article['references'] || '').split("\n")
+  article[:require] = (article[:require] || '').split("\n")
+  article[:references] = (article[:references] || '').split("\n")
 
   article
 end
