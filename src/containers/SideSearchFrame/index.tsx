@@ -11,6 +11,7 @@ import CodeLib from '../../lib/CodeLib';
 import SnippetListItem from '../../components/SnippetListItem';
 import SnippetList from '../../components/SnippetList';
 import TextInput from '../../components/TextInput';
+import Header from '../../components/Header';
 
 //
 
@@ -81,6 +82,7 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
   render(): JSX.Element {
     return (
       <div className='fixedFlex cols nooverflow'>
+        <Header />
         <div className='fixedFlex'>
           <TextInput placeholder='キーワード検索'
             value={this.props.searchBoxKeyword} onChange={this.handleChangeSearchBoxKeyword} />
