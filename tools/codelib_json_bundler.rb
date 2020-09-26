@@ -45,7 +45,7 @@ docs.map! do |article|
     article[:path] = '/' + Pathname.new(File.absolute_path(article[:path])).relative_path_from(@codelib_path).to_s
   end
   # たぶん、改行区切り
-  article[:require] = (article[:require] || '').split("\n")
+  article[:verified] = (article[:verified] || '').split("\n")
   article[:references] = (article[:references] || '').split("\n")
 
   article

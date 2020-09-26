@@ -20,25 +20,31 @@ article {
 h1 {
   border: 2px solid $accentcolor1;
   padding: 1px 6px 1px;
+  font-size: 1.7em;
 }
 h2 {
   border-bottom: 2px solid $accentcolor1;
   padding: 1px 6px 1px;
   margin-right: 50px;
+  font-size: 1.25em;
 }
 h3 {
   border-left: 5px solid $accentcolor1;
   padding: 1px 8px 1px;
+  font-size: 1.25em;
 }
 h4 {
   margin-left: 12px;
+  font-size: 1em;
 }
 p {
   margin-right: 20px;
 }
 pre {
-  background-color: $codebgcolor1;
-  color: $codefontcolor1;
+  // background-color: $codebgcolor1;
+  // color: $codefontcolor1;
+  background-color: $codebgcolor2;
+  color: $codefontcolor2;
   padding: 2px 5px;
   font-family: monospace;
 }
