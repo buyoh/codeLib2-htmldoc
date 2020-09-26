@@ -34,6 +34,11 @@ module.exports = {
   },
   devServer: {
     contentBase: __dirname + '/public',
-    port: 8020
+    port: 8020,
+    historyApiFallback: {
+      rewrites: [
+        { from: /./, to: '/index.html' }
+      ]
+    }
   }
 }

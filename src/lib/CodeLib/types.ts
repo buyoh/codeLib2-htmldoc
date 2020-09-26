@@ -13,4 +13,8 @@ const codeLibArticle = t.type({
 });
 
 export type CodeLibArticle = t.TypeOf<typeof codeLibArticle>;
-export const checkCodeLibArticle = checkType.bind(this, codeLibArticle);
+export const checkCodeLibArticleTypeOnly = checkType.bind(this, codeLibArticle);
+export function checkCodeLibArticle(x: unknown): boolean {
+  return checkCodeLibArticleTypeOnly(x) &&
+    (x as CodeLibArticle).path[0] === '/';
+} 

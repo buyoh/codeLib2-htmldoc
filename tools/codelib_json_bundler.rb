@@ -41,7 +41,9 @@ docs = Document.collect_documents(@codelib_path)
 
 docs.map! do |article|
   article[:words] = (article[:words] || '').split(',')
-  article[:path] = Pathname.new(File.absolute_path(article[:path])).relative_path_from(@codelib_path) if article[:path]
+  if article[:path]
+    article[:path] = '/' + Pathname.new(File.absolute_path(article[:path])).relative_path_from(@codelib_path).to_s
+  end
   # たぶん、改行区切り
   article[:require] = (article[:require] || '').split("\n")
   article[:references] = (article[:references] || '').split("\n")

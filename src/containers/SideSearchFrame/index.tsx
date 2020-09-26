@@ -15,7 +15,6 @@ import TextInput from '../../components/TextInput';
 //
 
 type Props = {
-  onSelectArticle: (path: string) => void
 }
 
 type State = {
@@ -91,7 +90,6 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
             {this.props.codeLibArticles ? this.props.codeLibArticles.map(item => (
               <SnippetListItem
                 title={item.title} path={item.path} key={item.path}
-                onSelect={() => this.props.onSelectArticle(item.path)}
               />
             )) : null}
           </SnippetList>

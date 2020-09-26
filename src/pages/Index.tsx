@@ -8,6 +8,7 @@ import * as CodeLibActions from '../stores/codelib/actions';
 import CodeLib from '../lib/CodeLib';
 import SideSearchFrame from '../containers/SideSearchFrame/';
 import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
+import { Switch, Route } from 'react-router-dom';
 
 //
 
@@ -15,7 +16,6 @@ type Props = {
 }
 
 type State = {
-  visibleArticle: CodeLibArticle | null,  // TODO: 疲れたので適当 全ての状態をRedux化すべきだろうか？
 }
 
 //
@@ -65,10 +65,15 @@ class Index extends React.Component<CombinedProps, State> {
     return (
       <div id='bodywrapper' className='cols'>
         <div className='flex row nooverflow' >
-          {/* TODO: 疲れたので適当 */}
-          <SideSearchFrame onSelectArticle={(p) => { this.setState(Object.assign({}, this.state, { visibleArticle: this.props.codeLibArticles.find(a => a.path == p) })); }} />
+          <SideSearchFrame />
           <div className='flex scrollableY'>
-            {this.state.visibleArticle ? <CodeLibArticleViewer article={this.state.visibleArticle} /> : 'おもち'}
+            <Switch>
+              {this.props.codeLibArticles.map(a => (
+                <Route path={`${a.path}.html`} key={a.path}>
+                  <CodeLibArticleViewer article={a} />
+                </Route>
+              ))}
+            </Switch>
           </div>
         </div>
       </div >

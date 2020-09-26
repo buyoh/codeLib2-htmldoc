@@ -1,10 +1,10 @@
 import React from 'react';
 import Styles from './style.module.scss';
+import { Link } from 'react-router-dom';
 
 type Props = {
   title: string,
-  path: string,
-  onSelect?: () => void,
+  path: string
 }
 
 type State = {
@@ -19,7 +19,7 @@ class SnippetListItem extends React.Component<Props, State> {
   render(): JSX.Element {
     return (
       <div className={Styles.item}>
-        <div className={Styles.title}><a href='#' onClick={this.props.onSelect}>{this.props.title}</a></div>
+        <div className={Styles.title}><Link to={`${this.props.path}.html`}>{this.props.title}</Link></div>
         <div className={Styles.path}>{this.props.path}</div>
       </div>
     );
