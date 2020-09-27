@@ -63,6 +63,13 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
             <textarea className="display" rows={30} readOnly={true} value={this.props.article.code} />
           </div>
 
+          <div>
+            <h2>commits</h2>
+            {this.props.article.commits.map(com => (
+              <div style={{ fontFamily: 'monospace' }}>{com.sha.substr(0, 8)}({com.date}): {com.message}</div>
+            ))}
+          </div>
+
           {/* <h2>last commit</h2>
 <div>[<%= @commit[:sha][0..7] %>](<%= @commit[:date].strftime("%Y-%m-%d %H:%M") %>) <%= @commit[:message] %></div> */}
         </article>

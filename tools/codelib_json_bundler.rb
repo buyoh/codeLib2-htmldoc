@@ -36,17 +36,23 @@ end
 require 'json'
 require 'pathname'
 require @codelib_path + '/tools/collector/collector.rb'
+require @codelib_path + '/tools/collector/gitlog.rb'
 
 docs = Document.collect_documents(@codelib_path)
+files = docs.map { |doc| doc[:path] }
+# path2commit = GitLog.collect_all_latest_nocache(files, 8, @codelib_path)
 
 docs.map! do |article|
   article[:words] = (article[:words] || '').split(',')
+  absolte_path = article[:path]
   if article[:path]
     article[:path] = '/' + Pathname.new(File.absolute_path(article[:path])).relative_path_from(@codelib_path).to_s
   end
   # たぶん、改行区切り
   article[:verified] = (article[:verified] || '').split("\n")
   article[:references] = (article[:references] || '').split("\n")
+
+  article[:commits] = GitLog.history(absolte_path, { n: 99 }, @codelib_path)
 
   article
 end
