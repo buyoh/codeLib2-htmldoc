@@ -1,6 +1,5 @@
-// import config from '../../config_prod.json';
-import config from '../../config_dev.json';
+const config = (window as any).appConfig;
 
-// note: check "publicPath"
-
-export default config;
+export default {
+  rootDirectory: config.rootDirectory as string,
+};
