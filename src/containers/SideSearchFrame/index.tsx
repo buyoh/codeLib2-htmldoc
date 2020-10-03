@@ -82,7 +82,7 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
 
   render(): JSX.Element {
     return (
-      <div className='fixedFlex cols nooverflow'>
+      <div className='fixedFlex cols nooverflow' style={{ width: '320px', resize: 'horizontal' }}>
         <Header />
         <div className='fixedFlex'>
           <TextInput placeholder='キーワード検索'
