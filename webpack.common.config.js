@@ -5,10 +5,21 @@ console.log('tsconfig', tsconfig_json);
 module.exports = {
   // mode: 'development',
   entry: './src/App.tsx',
-  // output: {
-  //   path: __dirname + '/public/',
-  //   filename: 'bundle.js'
-  // },
+  output: {
+    path: __dirname + '/public/',
+    publicPath: '/codeLib2',
+    filename: 'bundle.js'
+  },
+  devServer: {
+    contentBase: __dirname + '/public',
+    contentBasePublicPath: '/codeLib2',
+    port: 8020,
+    historyApiFallback: {
+      rewrites: [
+        { from: /./, to: '/codeLib2/index.html' }
+      ]
+    }
+  },
   module: {
     rules: [
       {
@@ -41,14 +52,5 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css', '.scss']
-  },
-  // devServer: {
-  //   contentBase: __dirname + '/public',
-  //   port: 8020,
-  //   historyApiFallback: {
-  //     rewrites: [
-  //       { from: /./, to: '/index.html' }
-  //     ]
-  //   }
-  // }
+  }
 }

@@ -12,6 +12,7 @@ import SnippetListItem from '../../components/SnippetListItem';
 import SnippetList from '../../components/SnippetList';
 import TextInput from '../../components/TextInput';
 import Header from '../../components/Header';
+import Config from '../../lib/Config';
 
 //
 
@@ -91,7 +92,7 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
           <SnippetList>
             {this.props.codeLibArticles ? this.props.codeLibArticles.map(item => (
               <SnippetListItem
-                title={item.title} path={item.path} key={item.path}
+                title={item.title} path={Config.rootDirectory + item.path} key={item.path}
               />
             )) : null}
           </SnippetList>

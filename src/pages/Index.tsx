@@ -9,6 +9,7 @@ import CodeLib from '../lib/CodeLib';
 import SideSearchFrame from '../containers/SideSearchFrame/';
 import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
 import { Switch, Route } from 'react-router-dom';
+import Config from '../lib/Config';
 
 //
 
@@ -69,7 +70,7 @@ class Index extends React.Component<CombinedProps, State> {
           <div className='flex scrollableY'>
             <Switch>
               {this.props.codeLibArticles.map(a => (
-                <Route path={`${a.path}.html`} key={a.path}>
+                <Route path={Config.rootDirectory + `${a.path}.html`} key={a.path}>
                   <CodeLibArticleViewer article={a} />
                 </Route>
               ))}

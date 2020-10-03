@@ -6,7 +6,7 @@ export async function fetchAll(): Promise<Array<CodeLibArticle>> {
   if (!responce.ok)
     throw Error('fetch codelib: fetch failed');
   const json = await responce.json();
-  if (!Array.isArray(json) || config.development && !json.every(checkCodeLibArticle)) {
+  if (!Array.isArray(json) || config.validate && !json.every(checkCodeLibArticle)) {
     setTimeout(() => { alert('type of codelib data validation Error!!'); }, 0);
     throw Error('fetch codelib: type validation Error');
   }
