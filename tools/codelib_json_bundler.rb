@@ -9,10 +9,12 @@ end
 
 @codelib_path = nil
 @output_path = 'public/data'
+@minimize = false
 
 opt = OptionParser.new
 opt.on('--codelib-path path/to/codelib') { |v| @codelib_path = v }
-opt.on('--output-path public') { |v| @output_path = v }
+opt.on('--output-path public/data') { |v| @output_path = v }
+opt.on('--minimize') { |_v| @minimize = true }
 opt.parse!(ARGV)
 
 if @codelib_path.nil?
@@ -57,5 +59,8 @@ docs.map! do |article|
   article
 end
 
-# IO.write @output_path + '/codelib_full.json', JSON.generate(docs)
-IO.write @output_path + '/codelib_full.json', JSON.pretty_generate(docs)
+if @minimize
+  IO.write @output_path + '/codelib_full.json', JSON.generate(docs)
+else
+  IO.write @output_path + '/codelib_full.json', JSON.pretty_generate(docs)
+end
