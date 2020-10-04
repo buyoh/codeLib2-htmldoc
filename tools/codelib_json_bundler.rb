@@ -8,7 +8,7 @@ def validate_path(path)
 end
 
 @codelib_path = nil
-@output_path = 'public/data'
+@output_path = __dir__ + '/../public/data'
 @minimize = false
 
 opt = OptionParser.new
