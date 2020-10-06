@@ -37,10 +37,10 @@ end
 
 require 'json'
 require 'pathname'
-require @codelib_path + '/tools/collector/collector.rb'
-require @codelib_path + '/tools/collector/gitlog.rb'
+require @codelib_path + '/tools/lib/collector/collector.rb'
+require @codelib_path + '/tools/lib/collector/gitlog.rb'
 
-docs = Document.collect_documents(@codelib_path)
+docs = Collector.collect_documents(@codelib_path)
 files = docs.map { |doc| doc[:path] }
 # path2commit = GitLog.collect_all_latest_nocache(files, 8, @codelib_path)
 
