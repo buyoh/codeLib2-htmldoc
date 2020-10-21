@@ -1,12 +1,9 @@
 import React from 'react';
 import Styles from './style.module.scss';
 
-type Props = {
-}
+type Props = {};
 
-type State = {
-}
-
+type State = {};
 
 class Header extends React.Component<Props, State> {
   constructor(props: Props) {

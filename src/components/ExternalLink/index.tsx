@@ -1,12 +1,10 @@
 import React from 'react';
 
 type Props = {
-  to: string
-}
+  to: string;
+};
 
-type State = {
-}
-
+type State = {};
 
 class ExternalLink extends React.Component<Props, State> {
   constructor(props: Props) {

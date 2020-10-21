@@ -13,21 +13,19 @@ import Config from '../lib/Config';
 
 //
 
-type Props = {
-}
+type Props = {};
 
-type State = {
-}
+type State = {};
 
 //
 
 type StateProps = {
-  codeLibArticles: Array<CodeLibArticle>
-}
+  codeLibArticles: Array<CodeLibArticle>;
+};
 
 type DispatchProps = {
-  onFetchCodeLibData: (items: Array<CodeLibArticle>) => void
-}
+  onFetchCodeLibData: (items: Array<CodeLibArticle>) => void;
+};
 
 type CombinedProps = Props & StateProps & DispatchProps;
 
@@ -35,13 +33,14 @@ type CombinedProps = Props & StateProps & DispatchProps;
 
 function mapStateToProps(state: RootState): StateProps {
   return {
-    codeLibArticles: state.codeLib.items
+    codeLibArticles: state.codeLib.items,
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
-    onFetchCodeLibData: (items: Array<CodeLibArticle>) => dispatch(CodeLibActions.setItems(items))
+    onFetchCodeLibData: (items: Array<CodeLibArticle>) =>
+      dispatch(CodeLibActions.setItems(items)),
   };
 }
 
@@ -64,22 +63,28 @@ class Index extends React.Component<CombinedProps, State> {
 
   render(): JSX.Element {
     return (
-      <div id='bodywrapper' className='cols'>
-        <div className='flex row nooverflow' >
+      <div id="bodywrapper" className="cols">
+        <div className="flex row nooverflow">
           <SideSearchFrame />
-          <div className='flex scrollableY'>
+          <div className="flex scrollableY">
             <Switch>
-              {this.props.codeLibArticles.map(a => (
-                <Route path={Config.rootDirectory + `${a.path}.html`} key={a.path}>
+              {this.props.codeLibArticles.map((a) => (
+                <Route
+                  path={Config.rootDirectory + `${a.path}.html`}
+                  key={a.path}
+                >
                   <CodeLibArticleViewer article={a} />
                 </Route>
               ))}
             </Switch>
           </div>
         </div>
-      </div >
+      </div>
     );
   }
 }
 
-export default connect<StateProps, DispatchProps, Props, RootState>(mapStateToProps, mapDispatchToProps)(Index);
+export default connect<StateProps, DispatchProps, Props, RootState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Index);

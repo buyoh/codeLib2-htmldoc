@@ -5,6 +5,6 @@ import { isRight } from 'fp-ts/lib/Either';
 export function checkType<T extends t.Any>(type: T, x: unknown): boolean {
   const d = type.decode(x);
   if (isRight(d)) return true;
-  PathReporter.report(d).forEach(t => console.warn(t));
+  PathReporter.report(d).forEach((t) => console.warn(t));
   return false;
 }

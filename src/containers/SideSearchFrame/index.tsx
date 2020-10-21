@@ -16,23 +16,21 @@ import Config from '../../lib/Config';
 
 //
 
-type Props = {
-}
+type Props = {};
 
-type State = {
-}
+type State = {};
 
 //
 
 type StateProps = {
-  codeLibArticles: Array<CodeLibArticle>
-  searchBoxKeyword: string
-}
+  codeLibArticles: Array<CodeLibArticle>;
+  searchBoxKeyword: string;
+};
 
 type DispatchProps = {
-  onFetchCodeLibData: (items: Array<CodeLibArticle>) => void
-  onChangeSearchBoxKeyword: (keyword: string) => void
-}
+  onFetchCodeLibData: (items: Array<CodeLibArticle>) => void;
+  onChangeSearchBoxKeyword: (keyword: string) => void;
+};
 
 type CombinedProps = Props & StateProps & DispatchProps;
 
@@ -40,20 +38,20 @@ type CombinedProps = Props & StateProps & DispatchProps;
 
 function mapStateToProps(state: RootState): StateProps {
   return {
-    codeLibArticles:
-      Impl.filterCodeLibArticles(state.codeLib.items, state.searchBox.keyword)
-        .sort((l, r) => l.path.localeCompare(r.path)),
-    searchBoxKeyword:
+    codeLibArticles: Impl.filterCodeLibArticles(
+      state.codeLib.items,
       state.searchBox.keyword
+    ).sort((l, r) => l.path.localeCompare(r.path)),
+    searchBoxKeyword: state.searchBox.keyword,
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
-    onFetchCodeLibData:
-      (items: Array<CodeLibArticle>) => dispatch(CodeLibActions.setItems(items)),
-    onChangeSearchBoxKeyword:
-      (keyword: string) => dispatch(SearchBoxActions.updateKeyword(keyword)),
+    onFetchCodeLibData: (items: Array<CodeLibArticle>) =>
+      dispatch(CodeLibActions.setItems(items)),
+    onChangeSearchBoxKeyword: (keyword: string) =>
+      dispatch(SearchBoxActions.updateKeyword(keyword)),
   };
 }
 
@@ -64,7 +62,9 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
     super(props);
     this.state = {};
 
-    this.handleChangeSearchBoxKeyword = this.handleChangeSearchBoxKeyword.bind(this);
+    this.handleChangeSearchBoxKeyword = this.handleChangeSearchBoxKeyword.bind(
+      this
+    );
   }
 
   componentDidMount(): void {
@@ -82,25 +82,37 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
 
   render(): JSX.Element {
     return (
-      <div className='fixedFlex cols nooverflow' style={{ width: '320px', resize: 'horizontal' }}>
+      <div
+        className="fixedFlex cols nooverflow"
+        style={{ width: '320px', resize: 'horizontal' }}
+      >
         <Header />
-        <div className='fixedFlex'>
-          <TextInput placeholder='キーワード検索'
-            value={this.props.searchBoxKeyword} onChange={this.handleChangeSearchBoxKeyword} />
+        <div className="fixedFlex">
+          <TextInput
+            placeholder="キーワード検索"
+            value={this.props.searchBoxKeyword}
+            onChange={this.handleChangeSearchBoxKeyword}
+          />
         </div>
-        <div className='flex nooverflow scrollableY' >
+        <div className="flex nooverflow scrollableY">
           <SnippetList>
-            {this.props.codeLibArticles ? this.props.codeLibArticles.map(item => (
-              <SnippetListItem
-                title={item.title} path={Config.rootDirectory + item.path} key={item.path}
-              />
-            )) : null}
+            {this.props.codeLibArticles
+              ? this.props.codeLibArticles.map((item) => (
+                  <SnippetListItem
+                    title={item.title}
+                    path={Config.rootDirectory + item.path}
+                    key={item.path}
+                  />
+                ))
+              : null}
           </SnippetList>
         </div>
-
-      </div >
+      </div>
     );
   }
 }
 
-export default connect<StateProps, DispatchProps, Props, RootState>(mapStateToProps, mapDispatchToProps)(SideSearchFrame);
+export default connect<StateProps, DispatchProps, Props, RootState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(SideSearchFrame);

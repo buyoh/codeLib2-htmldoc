@@ -4,6 +4,6 @@ import { SET_ITEMS, CodeLibActionTypes } from './types';
 export function setItems(items: Array<CodeLibArticle>): CodeLibActionTypes {
   return {
     type: SET_ITEMS,
-    items
+    items,
   };
 }

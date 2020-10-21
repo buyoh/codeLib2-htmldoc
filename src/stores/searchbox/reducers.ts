@@ -1,16 +1,17 @@
 import { SearchBoxActionTypes, SearchBoxState, UPDATE_KEYWORD } from './types';
 
 const initialState: SearchBoxState = {
-  keyword: ''
+  keyword: '',
 };
 
 export function searchBoxReducer(
   state = initialState,
-  action: SearchBoxActionTypes): SearchBoxState {
+  action: SearchBoxActionTypes
+): SearchBoxState {
   switch (action.type) {
     case UPDATE_KEYWORD:
       return {
-        keyword: action.keyword
+        keyword: action.keyword,
       };
     default:
       return state;

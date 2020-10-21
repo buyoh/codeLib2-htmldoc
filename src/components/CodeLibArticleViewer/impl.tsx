@@ -7,21 +7,25 @@ function prependSlash(text: string): string {
 }
 
 export function convertToReferenceList(texts: Array<string>): JSX.Element {
-  return (<ul>
-    {texts.map((line) =>
-      <li>
-        {line.startsWith('http') ?
-          <ExternalLink to={line}>{line}</ExternalLink> :
-          `${line}\n`}
-      </li>
-    )}
-  </ul>);
+  return (
+    <ul>
+      {texts.map((line) => (
+        <li>
+          {line.startsWith('http') ? (
+            <ExternalLink to={line}>{line}</ExternalLink>
+          ) : (
+            `${line}\n`
+          )}
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 export function convertToRequireList(text: string): JSX.Element {
-  const dom: Array<{ link: boolean, text: string }> = [];
-  const re = (/src\/[0-9a-zA-Z/._-]+/g);
-  let m: (RegExpExecArray | null) = null;
+  const dom: Array<{ link: boolean; text: string }> = [];
+  const re = /src\/[0-9a-zA-Z/._-]+/g;
+  let m: RegExpExecArray | null = null;
   let lastIndex = 0;
   while ((m = re.exec(text)) !== null) {
     const l = m[0].length;
@@ -33,7 +37,13 @@ export function convertToRequireList(text: string): JSX.Element {
 
   return (
     <div>
-      {dom.map(e => e.link ? <Link to={prependSlash(e.text) + '.html'}>{e.text}</Link> : e.text)}
+      {dom.map((e) =>
+        e.link ? (
+          <Link to={prependSlash(e.text) + '.html'}>{e.text}</Link>
+        ) : (
+          e.text
+        )
+      )}
     </div>
   );
 }

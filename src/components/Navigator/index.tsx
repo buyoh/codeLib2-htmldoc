@@ -1,12 +1,9 @@
 import React from 'react';
 import Styles from './style.module.scss';
 
-type Props = {
-}
+type Props = {};
 
-type State = {
-}
-
+type State = {};
 
 class Navigator extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -14,10 +11,7 @@ class Navigator extends React.Component<Props, State> {
   }
 
   render(): JSX.Element {
-    return (
-      <div className={Styles.navigator} role="navigation">
-      </div>
-    );
+    return <div className={Styles.navigator} role="navigation"></div>;
   }
 }
 

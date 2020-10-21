@@ -1,11 +1,8 @@
 import React from 'react';
 
-type Props = {
-}
+type Props = {};
 
-type State = {
-}
-
+type State = {};
 
 class SnippetSummaryList extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -13,11 +10,7 @@ class SnippetSummaryList extends React.Component<Props, State> {
   }
 
   render(): JSX.Element {
-    return (
-      <div>
-        {this.props.children}
-      </div>
-    );
+    return <div>{this.props.children}</div>;
   }
 }
 
