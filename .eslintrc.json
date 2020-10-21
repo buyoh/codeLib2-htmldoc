@@ -8,7 +8,8 @@
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "prettier"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -19,13 +20,6 @@
         "sourceType": "module"
     },
     "rules": {
-        "indent": [
-            "error",
-            2,
-            {
-                "SwitchCase": 1
-            }
-        ],
         "linebreak-style": [
             "error",
             "unix"
