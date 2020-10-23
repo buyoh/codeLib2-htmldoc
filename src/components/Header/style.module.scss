@@ -9,5 +9,8 @@
     border-color: $accentcolor2;
     border-width: 2px;
     border-style: none none solid;
+    a {
+      color: inherit;
+    }
   }
 }

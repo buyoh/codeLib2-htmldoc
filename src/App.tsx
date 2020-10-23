@@ -9,8 +9,8 @@ import Config from './lib/Config';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={rootStore}>
-      <BrowserRouter>
-        <Route path={Config.rootDirectory}>
+      <BrowserRouter basename={Config.rootDirectory}>
+        <Route path="/">
           {/* Index page only */}
           <Index />
         </Route>

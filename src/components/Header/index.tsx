@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Styles from './style.module.scss';
 
 type Props = {};
@@ -13,7 +14,9 @@ class Header extends React.Component<Props, State> {
   render(): JSX.Element {
     return (
       <div className={Styles.header}>
-        <div className={Styles.title}>doc-codelib2</div>
+        <div className={Styles.title}>
+          <Link to="/">doc-codelib2</Link>
+        </div>
       </div>
     );
   }
