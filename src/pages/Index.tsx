@@ -9,6 +9,7 @@ import CodeLib from '../lib/CodeLib';
 import SideSearchFrame from '../containers/SideSearchFrame/';
 import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
 import { Switch, Route } from 'react-router-dom';
+import TopContentFrame from '../containers/TopContentFrame';
 
 //
 
@@ -72,6 +73,9 @@ class Index extends React.Component<CombinedProps, State> {
                   <CodeLibArticleViewer article={a} />
                 </Route>
               ))}
+              <Route path={'/'} key="/">
+                <TopContentFrame />
+              </Route>
             </Switch>
           </div>
         </div>
