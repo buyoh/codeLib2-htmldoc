@@ -17,6 +17,7 @@ const codeLibArticle = t.type({
   words: t.union([t.undefined, t.array(t.string)]),
   verified: t.union([t.undefined, t.array(t.string)]),
   commits: t.array(codeLibCommit),
+  tested_by: t.array(t.string)
 });
 
 export type CodeLibArticle = t.TypeOf<typeof codeLibArticle>;

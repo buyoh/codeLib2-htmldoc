@@ -37,30 +37,33 @@ end
 
 require 'json'
 require 'pathname'
-require @codelib_path + '/tools/lib/collector/collector.rb'
+require @codelib_path + '/tools/lib/collector/collection.rb'
 require @codelib_path + '/tools/lib/collector/gitlog.rb'
 
-docs = Collector.collect_documents(@codelib_path)
-files = docs.map { |doc| doc[:path] }
-# path2commit = GitLog.collect_all_latest_nocache(files, 8, @codelib_path)
-
-docs.map! do |article|
-  article[:words] = (article[:words] || '').split(',')
-  absolte_path = article[:path]
-  if article[:path]
-    article[:path] = '/' + Pathname.new(File.absolute_path(article[:path])).relative_path_from(@codelib_path).to_s
-  end
-  # たぶん、改行区切り
-  article[:verified] = (article[:verified] || '').split("\n")
-  article[:references] = (article[:references] || '').split("\n")
-
-  article[:commits] = GitLog.history(absolte_path, { n: 99 }, @codelib_path)
-
-  article
+collection = Collection.new(@codelib_path)
+output_docs = collection.src_docs.map do |article|
+  path = article[:path]
+  absolte_path = File.absolute_path(@codelib_path + '/' + article[:path])
+  relation = collection.src_relations[path]
+  {
+    title: article[:title],
+    overview: article[:overview],
+    code: article[:code],
+    path: '/' + article[:path],
+    require: article[:require] || '',
+    references: (article[:references] || '').split("\n"),
+    words: (article[:words] || '').split(','),
+    verified: (article[:verified] || '').split("\n"),
+    commits: GitLog.history(absolte_path, { n: 99 }, @codelib_path),
+    tested_by: relation ? relation[:tested_by] : []
+  }
 end
 
+# TODO: top page contents e.g. coverage
+# summary = {}
+
 if @minimize
-  IO.write @output_path + '/codelib_full.json', JSON.generate(docs)
+  IO.write @output_path + '/codelib_full.json', JSON.generate(output_docs)
 else
-  IO.write @output_path + '/codelib_full.json', JSON.pretty_generate(docs)
+  IO.write @output_path + '/codelib_full.json', JSON.pretty_generate(output_docs)
 end

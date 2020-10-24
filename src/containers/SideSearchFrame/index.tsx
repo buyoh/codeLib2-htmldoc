@@ -98,8 +98,8 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
             {this.props.codeLibArticles
               ? this.props.codeLibArticles.map((item) => (
                   <SnippetListItem
-                    title={item.title}
-                    path={item.path}
+                    article={item}
+                    linkto={`${item.path}.html`}
                     key={item.path}
                   />
                 ))
