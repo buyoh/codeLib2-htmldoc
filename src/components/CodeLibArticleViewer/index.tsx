@@ -1,6 +1,7 @@
 import React from 'react';
 import { CodeLibArticle } from '../../lib/CodeLib/types';
 import ArticleViewFrame from '../ArticleViewerFrame';
+import Badge from '../Badge';
 import * as Impl from './impl';
 // import Styles from './style.module.scss';
 
@@ -19,6 +20,9 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
     return (
       <ArticleViewFrame>
         <h1>{this.props.article.title}</h1>
+        <div>
+          <Badge text={this.props.article.lang} style={1}></Badge>
+        </div>
         <div>keyword:{this.props.article.words?.join(' ')}</div>
         <hr />
 

@@ -1,0 +1,13 @@
+@import "./../../style/color.scss";
+
+.badge1 {
+  background-color: $accentcolor1;
+  color: $fontcoloronaccent1;
+  padding: 0.1em 0.3em;
+  border-radius: 0.3em;
+  margin-right: 2px;
+}
+.badge2 {
+  background-color: $accentcolor2;
+  color: $fontcoloronaccent2;
+}

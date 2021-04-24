@@ -1,10 +1,32 @@
 import { CodeLibArticle } from '../../lib/CodeLib/types';
 
+function testArticleByLang(a: CodeLibArticle, lang: string) {
+  return !lang || a.lang === lang;
+}
+
+function testArticleByKeyRe(a: CodeLibArticle, re: RegExp) {
+  return (
+    re.test(a.path) ||
+    a.words?.some((word) => re.test(word)) ||
+    re.test(a.title)
+  );
+}
+
+function testArticleByKeyStr(a: CodeLibArticle, key: string) {
+  return (
+    a.path.includes(key) ||
+    a.words?.some((word) => word.includes(key)) ||
+    a.title.includes(key)
+  );
+}
+
 export function filterCodeLibArticles(
   items: ReadonlyArray<CodeLibArticle>,
-  keyword: string
+  keyword: string,
+  lang: string
 ): Array<CodeLibArticle> {
-  if (!keyword) return items.concat();
+  if (!keyword)
+    return items.filter((article) => testArticleByLang(article, lang));
   let reg = null as RegExp | null;
   try {
     reg = new RegExp(keyword, 'i');
@@ -15,15 +37,12 @@ export function filterCodeLibArticles(
     const re = reg;
     return items.filter(
       (article) =>
-        re.test(article.path) ||
-        article.words?.some((word) => re.test(word)) ||
-        re.test(article.title)
+        testArticleByLang(article, lang) && testArticleByKeyRe(article, re)
     );
   } else
     return items.filter(
       (article) =>
-        article.path.includes(keyword) ||
-        article.words?.some((word) => word.includes(keyword)) ||
-        article.title.includes(keyword)
+        testArticleByLang(article, lang) &&
+        testArticleByKeyStr(article, keyword)
     );
 }

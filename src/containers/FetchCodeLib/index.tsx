@@ -50,7 +50,6 @@ class FetchCodeLib extends React.Component<CombinedProps, State> {
   componentDidMount(): void {
     (async () => {
       const items = await CodeLib.fetchAll();
-      console.log('fetch');
       this.props.onFetchCodeLibData(items);
     })();
   }

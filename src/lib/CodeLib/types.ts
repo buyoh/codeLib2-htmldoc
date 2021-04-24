@@ -12,6 +12,7 @@ const codeLibArticle = t.type({
   overview: t.string,
   code: t.string,
   path: t.string,
+  lang: t.string,
   require: t.union([t.undefined, t.string]),
   references: t.union([t.undefined, t.array(t.string)]),
   words: t.union([t.undefined, t.array(t.string)]),

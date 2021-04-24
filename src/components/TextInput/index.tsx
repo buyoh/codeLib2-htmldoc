@@ -16,15 +16,13 @@ class TextInput extends React.Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="flex row">
-        <input
-          type="text"
-          className={[Styles.textInput, 'flex'].join(' ')}
-          placeholder={this.props.placeholder}
-          value={this.props.value}
-          onChange={this.props.onChange}
-        />
-      </div>
+      <input
+        type="text"
+        className={[Styles.textInput, 'flex'].join(' ')}
+        placeholder={this.props.placeholder}
+        value={this.props.value}
+        onChange={this.props.onChange}
+      />
     );
   }
 }

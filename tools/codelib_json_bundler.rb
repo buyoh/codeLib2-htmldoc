@@ -38,6 +38,7 @@ end
 require 'json'
 require 'pathname'
 require @codelib_path + '/tools/lib/collector/collection.rb'
+require @codelib_path + '/tools/lib/collector/collector.rb'
 require @codelib_path + '/tools/lib/collector/gitlog.rb'
 
 collection = Collection.new(@codelib_path)
@@ -49,6 +50,7 @@ output_docs = collection.src_docs.map do |article|
     title: article[:title],
     overview: article[:overview],
     code: article[:code],
+    lang: Collector.lang_from_path(article[:path]),
     path: '/' + article[:path],
     require: article[:require] || '',
     references: (article[:references] || '').split("\n"),
