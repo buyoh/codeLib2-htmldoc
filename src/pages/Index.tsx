@@ -10,6 +10,7 @@ import SideSearchFrame from '../containers/SideSearchFrame/';
 import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
 import { Switch, Route } from 'react-router-dom';
 import TopContentFrame from '../containers/TopContentFrame';
+import FetchCodeLib from '../containers/FetchCodeLib';
 
 //
 
@@ -64,6 +65,7 @@ class Index extends React.Component<CombinedProps, State> {
   render(): JSX.Element {
     return (
       <div id="bodywrapper" className="cols">
+        <FetchCodeLib />
         <div className="flex row nooverflow">
           <SideSearchFrame />
           <div className="flex scrollableY">

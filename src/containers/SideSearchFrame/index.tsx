@@ -4,10 +4,8 @@ import { connect } from 'react-redux';
 import '../../style/style-screen.scss';
 import { RootState } from '../../stores';
 import { CodeLibArticle } from '../../lib/CodeLib/types';
-import * as CodeLibActions from '../../stores/codelib/actions';
 import * as SearchBoxActions from '../../stores/searchbox/actions';
 import * as Impl from './impl';
-import CodeLib from '../../lib/CodeLib';
 import SnippetListItem from '../../components/SnippetListItem';
 import SnippetList from '../../components/SnippetList';
 import TextInput from '../../components/TextInput';
@@ -27,7 +25,6 @@ type StateProps = {
 };
 
 type DispatchProps = {
-  onFetchCodeLibData: (items: Array<CodeLibArticle>) => void;
   onChangeSearchBoxKeyword: (keyword: string) => void;
 };
 
@@ -47,8 +44,6 @@ function mapStateToProps(state: RootState): StateProps {
 
 function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
-    onFetchCodeLibData: (items: Array<CodeLibArticle>) =>
-      dispatch(CodeLibActions.setItems(items)),
     onChangeSearchBoxKeyword: (keyword: string) =>
       dispatch(SearchBoxActions.updateKeyword(keyword)),
   };
@@ -65,15 +60,6 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
       this
     );
   }
-
-  componentDidMount(): void {
-    (async () => {
-      const items = await CodeLib.fetchAll();
-      this.props.onFetchCodeLibData(items);
-    })();
-  }
-
-  // componentWillUnmount(): void  // for unscribe
 
   handleChangeSearchBoxKeyword(e: ChangeEvent<HTMLInputElement>) {
     this.props.onChangeSearchBoxKeyword(e.target.value);
