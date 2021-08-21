@@ -89,9 +89,8 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
     super(props);
     this.state = {};
 
-    this.handleChangeSearchBoxKeyword = this.handleChangeSearchBoxKeyword.bind(
-      this
-    );
+    this.handleChangeSearchBoxKeyword =
+      this.handleChangeSearchBoxKeyword.bind(this);
     this.handleChangeSearchBoxLang = this.handleChangeSearchBoxLang.bind(this);
   }
 
