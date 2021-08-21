@@ -1,5 +1,5 @@
 #!/bin/bash
 
 yarn lint-fix
-yarn data-build
+CODELIB_PATH=../codeLib2 yarn data-build
 yarn build
