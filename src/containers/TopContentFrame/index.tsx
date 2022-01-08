@@ -33,12 +33,9 @@ class TopContentFrame extends React.Component<Props, State> {
             codeLib2
           </ExternalLink>
           をドキュメント化したものです。
-          <br />
-          個人用であり、他アルゴリズム解説サイトと比較して正確性に欠けていますので、引用は禁止しませんが控えてください。
         </p>
         <p>気になった点を報告したい方は上記repositoryのissueよりお願いします</p>
-        <h2>coverage</h2>
-        <p>TODO: なんちゃってcoverageを自作する</p>
+        {/* <h2>coverage</h2> */}
       </ArticleViewFrame>
     );
   }
