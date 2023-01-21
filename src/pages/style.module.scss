@@ -1,0 +1,65 @@
+@import "./../style/color.scss";
+
+@import "./../style/screen.scss";
+
+@include media(small) {
+  .bodyWrapper {
+    // overflow-x: clip;
+  }
+
+  .layoutTopFrame {
+    padding: 15px 30px;
+  }
+
+  .layoutFullFrame {
+  }
+  .layoutMainPageFrame {
+  }
+
+  .layoutSideSearchFrame {
+    padding: 15px 30px;
+  }
+}
+
+@include media(desktop) {
+  .bodyWrapper {
+    width: 100vw;
+    height: 100vh;
+    // .nooverflow
+    overflow: hidden;
+    // .cols
+    display: flex;
+    flex-direction: column;
+  }
+
+  .layoutTopFrame {
+    // .flex
+    flex: 1 1 auto;
+  }
+
+  .layoutFullFrame {
+    // row
+    display: flex;
+    flex-direction: row-reverse;
+    // .nooverflow
+    overflow: hidden;
+    // .flex
+    flex: 1 1 auto;
+  }
+
+  .layoutMainPageFrame {
+    // .flex
+    flex: 1 1 auto;
+    // .scrollableY
+    overflow-y: scroll;
+  }
+  
+  .layoutSideSearchFrame {
+    width: 320px; resize: horizontal;
+    // .nooverflow
+    overflow: hidden;
+    // .flex
+    flex: 0 0 auto;
+  }
+
+}

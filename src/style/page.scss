@@ -12,6 +12,11 @@ body {
   font-size: 1.6rem;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 article {
   padding: 15px 30px 100px;
   background-color: $bg1color;
@@ -47,6 +52,7 @@ pre {
   color: $codefontcolor2;
   padding: 2px 5px;
   font-family: monospace;
+  overflow-x: auto;
 }
 textarea.display {
   display: block;
@@ -101,6 +107,11 @@ code {
 .row {
   display: flex;
   flex-direction: row;
+}
+
+.row-reverse {
+  display: flex;
+  flex-direction: row-reverse;
 }
 
 .cols {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import '../style/style-screen.scss';
+import '../style/page.scss';
+import Styles from './style.module.scss';
 import { RootState } from '../stores';
 import { CodeLibArticle } from '../lib/CodeLib/types';
 import * as CodeLibActions from '../stores/codelib/actions';
@@ -11,6 +12,7 @@ import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
 import { Switch, Route } from 'react-router-dom';
 import TopContentFrame from '../containers/TopContentFrame';
 import FetchCodeLib from '../containers/FetchCodeLib';
+import Header from '../components/Header';
 
 //
 
@@ -64,11 +66,13 @@ class Index extends React.Component<CombinedProps, State> {
 
   render(): JSX.Element {
     return (
-      <div id="bodywrapper" className="cols">
+      <div className={Styles.bodyWrapper}>
         <FetchCodeLib />
-        <div className="flex row nooverflow">
-          <SideSearchFrame />
-          <div className="flex scrollableY">
+        <div className={Styles.layoutTopFrame}>
+          <Header />
+        </div>
+        <div className={Styles.layoutFullFrame}>
+          <div className={Styles.layoutMainPageFrame}>
             <Switch>
               {this.props.codeLibArticles.map((a) => (
                 <Route path={`${a.path}.html`} key={a.path}>
@@ -79,6 +83,9 @@ class Index extends React.Component<CombinedProps, State> {
                 <TopContentFrame />
               </Route>
             </Switch>
+          </div>
+          <div className={Styles.layoutSideSearchFrame}>
+            <SideSearchFrame />
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import '../../style/style-screen.scss';
+import '../../style/page.scss';
 import { RootState } from '../../stores';
 import { CodeLibArticle } from '../../lib/CodeLib/types';
 import * as SearchBoxActions from '../../stores/searchbox/actions';
@@ -9,7 +9,6 @@ import * as Impl from './impl';
 import SnippetListItem from '../../components/SnippetListItem';
 import SnippetList from '../../components/SnippetList';
 import TextInput from '../../components/TextInput';
-import Header from '../../components/Header';
 import Select from '../../components/Select';
 
 //
@@ -104,11 +103,7 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
 
   render(): JSX.Element {
     return (
-      <div
-        className="fixedFlex cols nooverflow"
-        style={{ width: '320px', resize: 'horizontal' }}
-      >
-        <Header />
+      <div className={'cols'}>
         <div className="fixedFlex row">
           <div className="flex row">
             <TextInput
