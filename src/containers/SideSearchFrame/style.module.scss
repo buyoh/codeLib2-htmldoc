@@ -1,0 +1,15 @@
+
+@import "./../../style/screen.scss";
+
+@include media(small) {
+  .scrollableY_forDesktop {
+    overflow-y: visible
+  }
+}
+
+@include media(desktop) {
+
+  .scrollableY_forDesktop {
+    overflow-y: scroll;
+  }
+}

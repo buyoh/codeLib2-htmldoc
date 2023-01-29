@@ -33,8 +33,8 @@
   }
 
   .layoutTopFrame {
-    // .flex
-    flex: 1 1 auto;
+    // .fixedFlex
+    flex: 0 0 auto;
   }
 
   .layoutFullFrame {
@@ -60,6 +60,9 @@
     overflow: hidden;
     // .flex
     flex: 0 0 auto;
+    // .cols 
+    display: flex;
+    flex-direction: column;
   }
 
 }

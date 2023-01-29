@@ -10,6 +10,7 @@ import SnippetListItem from '../../components/SnippetListItem';
 import SnippetList from '../../components/SnippetList';
 import TextInput from '../../components/TextInput';
 import Select from '../../components/Select';
+import Style from './style.module.scss';
 
 //
 
@@ -102,8 +103,10 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
   }
 
   render(): JSX.Element {
+    // 外枠は layoutSideSearchFrame で .cols と .nooverflow を定義
+    // cols はできればここに書きたいが、flexなdivブロックがもう１重必要になる
     return (
-      <div className={'cols'}>
+      <>
         <div className="fixedFlex row">
           <div className="flex row">
             <TextInput
@@ -120,7 +123,7 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
             />
           </div>
         </div>
-        <div className="flex nooverflow scrollableY">
+        <div className={'flex nooverflow ' + Style.scrollableY_forDesktop}>
           <SnippetList>
             {this.props.codeLibArticles
               ? this.props.codeLibArticles.map((item) => (
@@ -133,7 +136,7 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
               : null}
           </SnippetList>
         </div>
-      </div>
+      </>
     );
   }
 }
