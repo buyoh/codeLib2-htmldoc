@@ -10,8 +10,7 @@
     "build": "NODE_OPTIONS='--openssl-legacy-provider' TS_NODE_PROJECT='tsconfig.prod.json' webpack --config webpack.prod.config.js",
     "dev": "webpack-dev-server",
     "lint": "prettier --check 'src/**/*.ts' 'src/**/*.tsx' && eslint src/**/*.ts",
-    "lint-fix": "prettier --write 'src/**/*.ts' 'src/**/*.tsx'",
-    "data-build": "ruby tools/codelib_json_bundler.rb --codelib-path $CODELIB_PATH"
+    "lint-fix": "prettier --write 'src/**/*.ts' 'src/**/*.tsx'"
   },
   "dependencies": {
     "@types/react": "^17.0.80",

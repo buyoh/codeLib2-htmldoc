@@ -12,8 +12,12 @@ yarn
 
 ### generate codeLib2 data
 
+Use codeLib2-tools https://github.com/buyoh/codeLib2-tools
+
 ```
-ruby tools/codelib_json_bundler.rb --codelib-path ../codeLib2/ --minimize
+../codeLib2-tools/target/release/gather \
+  --basepath ../codeLib2 \
+  --output-path-article public/data/codelib_full.json
 ```
 
 ### play dev-server
