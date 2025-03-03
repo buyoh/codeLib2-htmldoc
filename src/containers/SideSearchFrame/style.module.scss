@@ -1,13 +1,13 @@
 
-@import "./../../style/screen.scss";
+@use "./../../style/screen.scss";
 
-@include media(small) {
+@include screen.media(small) {
   .scrollableY_forDesktop {
     overflow-y: visible
   }
 }
 
-@include media(desktop) {
+@include screen.media(desktop) {
 
   .scrollableY_forDesktop {
     overflow-y: scroll;

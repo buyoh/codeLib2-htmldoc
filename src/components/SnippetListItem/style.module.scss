@@ -1,9 +1,9 @@
-@import "./../../style/color.scss";
+@use "./../../style/color.scss";
 
 .item {
-  border-bottom: 1px dashed $accentcolor1;
+  border-bottom: 1px dashed color.$accentcolor1;
   .title {
-    // border-left: 5px solid $accentcolor1;
+    // border-left: 5px solid color.$accentcolor1;
     padding-left: 8px;
     // font-weight: bolder;
   }

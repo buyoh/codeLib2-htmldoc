@@ -1,8 +1,8 @@
-@import "./../style/color.scss";
+@use "./../style/color.scss";
 
-@import "./../style/screen.scss";
+@use "./../style/screen.scss";
 
-@include media(small) {
+@include screen.media(small) {
   .bodyWrapper {
     // overflow-x: clip;
   }
@@ -21,7 +21,7 @@
   }
 }
 
-@include media(desktop) {
+@include screen.media(desktop) {
   .bodyWrapper {
     width: 100vw;
     height: 100vh;

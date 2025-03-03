@@ -1,4 +1,4 @@
-@import "./../../style/color.scss";
+@use "./../../style/color.scss";
 
 .navigator {
   margin-bottom: 10px;
@@ -7,18 +7,18 @@
     padding: 0px 20px;
     list-style-type: none;
     li {
-      background-color: $bg1color;
-      //border: 2px solid $fontcolor;
+      background-color: color.$bg1color;
+      //border: 2px solid color.$fontcolor;
       border-radius: 2px;
       padding: 3px 10px;
       margin: 1px 5px;
       float: left;
       a {
-        color: $fonthyperlink1;
+        color: color.$fonthyperlink1;
         text-decoration: underline solid;
       }
       a:hover {
-        color: $fonthyperlinkhover1;
+        color: color.$fonthyperlinkhover1;
         text-decoration: underline double;
       }
     }
