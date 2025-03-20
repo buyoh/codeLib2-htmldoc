@@ -1,0 +1,30 @@
+name: test-run
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '20'
+    # - name: get git submodules
+    #   run: |
+    #     git submodule init
+    #     git submodule update
+    - name: install packages
+      run: |
+        yarn
+    - name: lint javascript
+      run: |
+        yarn lint
+    - name: build
+      run: |
+        yarn build
+    - name: run
+      run: |
+        timeout 20 yarn dev || [[ $? -eq 124 ]]
+
