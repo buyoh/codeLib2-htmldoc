@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { articlePathFromUrl, articleUrl, isExternalUrl } from './url';
+import {
+  articleAbsoluteUrl,
+  articlePathFromUrl,
+  articleUrl,
+  isExternalUrl,
+} from './url';
 
 describe('articleUrl / articlePathFromUrl', () => {
   it('appends .html to the article path', () => {
@@ -61,5 +66,19 @@ describe('isExternalUrl', () => {
     '',
   ])('rejects %s', (url) => {
     expect(isExternalUrl(url)).toBe(false);
+  });
+});
+
+describe('articleAbsoluteUrl', () => {
+  it('joins origin, root directory and article url', () => {
+    expect(articleAbsoluteUrl('https://example.com', '/src/cpp/a.hpp')).toBe(
+      'https://example.com/codeLib2/src/cpp/a.hpp.html'
+    );
+  });
+
+  it('encodes path segments', () => {
+    expect(articleAbsoluteUrl('https://example.com', '/src/a#b')).toBe(
+      'https://example.com/codeLib2/src/a%23b.html'
+    );
   });
 });

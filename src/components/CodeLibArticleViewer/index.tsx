@@ -3,6 +3,8 @@ import { CodeLibArticle } from '../../lib/CodeLib/types';
 import ArticleViewFrame from '../ArticleViewerFrame';
 import Badge from '../Badge';
 import * as Impl from './impl';
+import { prependUrlComment } from '../../lib/CodeLib/code';
+import { articleAbsoluteUrl } from '../../lib/CodeLib/url';
 
 type Props = {
   article: CodeLibArticle;
@@ -61,7 +63,14 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
             className="display"
             rows={30}
             readOnly={true}
-            value={this.props.article.code}
+            value={prependUrlComment(
+              this.props.article.code,
+              this.props.article.lang,
+              articleAbsoluteUrl(
+                window.location.origin,
+                this.props.article.path
+              )
+            )}
           />
         </div>
 

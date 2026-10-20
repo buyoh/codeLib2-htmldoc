@@ -1,3 +1,5 @@
+import Config from '../Config';
+
 const ARTICLE_URL_SUFFIX = '.html';
 
 function decodeSegment(segment: string): string {
@@ -32,4 +34,9 @@ export function isExternalUrl(text: string): boolean {
   } catch {
     return false;
   }
+}
+
+// 記事ページの絶対 URL (例: https://hostname/codeLib2/src/cpp/a.hpp.html)
+export function articleAbsoluteUrl(origin: string, path: string): string {
+  return origin + Config.rootDirectory + articleUrl(path);
 }
