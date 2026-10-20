@@ -7,7 +7,7 @@ type Props = {
   placeholder?: string;
 };
 
-type State = {};
+type State = Record<string, never>;
 
 class TextInput extends React.Component<Props, State> {
   constructor(props: Props) {

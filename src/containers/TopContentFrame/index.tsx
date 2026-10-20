@@ -5,9 +5,9 @@ import ExternalLink from '../../components/ExternalLink';
 // note:
 // containers を子に持つ components …になる予定
 
-type Props = {};
+type Props = Record<string, never>;
 
-type State = {};
+type State = Record<string, never>;
 
 class TopContentFrame extends React.Component<Props, State> {
   constructor(props: Props) {

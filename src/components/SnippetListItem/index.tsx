@@ -9,7 +9,7 @@ type Props = {
   linkto: string;
 };
 
-type State = {};
+type State = Record<string, never>;
 
 class SnippetListItem extends React.Component<Props, State> {
   constructor(props: Props) {

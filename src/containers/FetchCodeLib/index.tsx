@@ -8,9 +8,9 @@ import CodeLib from '../../lib/CodeLib';
 
 //
 
-type Props = {};
+type Props = Record<string, never>;
 
-type State = {};
+type State = Record<string, never>;
 
 //
 

@@ -7,7 +7,7 @@ type Props = {
   style?: number;
 };
 
-type State = {};
+type State = Record<string, never>;
 
 function badgeStyle(style?: number): string {
   return style == 1 ? Styles.badge1 : '';

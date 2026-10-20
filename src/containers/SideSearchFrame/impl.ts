@@ -30,7 +30,7 @@ export function filterCodeLibArticles(
   let reg = null as RegExp | null;
   try {
     reg = new RegExp(keyword, 'i');
-  } catch (e) {
+  } catch {
     //
   }
   if (reg !== null) {

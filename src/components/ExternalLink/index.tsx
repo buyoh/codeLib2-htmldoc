@@ -5,7 +5,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-type State = {};
+type State = Record<string, never>;
 
 class ExternalLink extends React.Component<Props, State> {
   constructor(props: Props) {

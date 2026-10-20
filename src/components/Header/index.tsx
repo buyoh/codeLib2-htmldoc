@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router';
 import Styles from './style.module.scss';
 
-type Props = {};
+type Props = Record<string, never>;
 
-type State = {};
+type State = Record<string, never>;
 
 class Header extends React.Component<Props, State> {
   constructor(props: Props) {

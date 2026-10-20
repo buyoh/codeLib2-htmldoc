@@ -4,7 +4,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-type State = {};
+type State = Record<string, never>;
 
 class ArticleViewFrame extends React.Component<Props, State> {
   constructor(props: Props) {

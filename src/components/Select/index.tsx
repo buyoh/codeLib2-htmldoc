@@ -14,7 +14,7 @@ type Props = {
   placeholder?: string;
 };
 
-type State = {};
+type State = Record<string, never>;
 
 class Select extends React.Component<Props, State> {
   constructor(props: Props) {

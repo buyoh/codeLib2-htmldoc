@@ -16,9 +16,9 @@ import Header from '../components/Header';
 
 //
 
-type Props = {};
+type Props = Record<string, never>;
 
-type State = {};
+type State = Record<string, never>;
 
 //
 
@@ -52,7 +52,7 @@ function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
 class Index extends React.Component<CombinedProps, State> {
   constructor(props: CombinedProps) {
     super(props);
-    this.state = { visibleArticle: null };
+    this.state = {};
   }
 
   componentDidMount(): void {

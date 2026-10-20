@@ -3,13 +3,12 @@ import { CodeLibArticle } from '../../lib/CodeLib/types';
 import ArticleViewFrame from '../ArticleViewerFrame';
 import Badge from '../Badge';
 import * as Impl from './impl';
-// import Styles from './style.module.scss';
 
 type Props = {
   article: CodeLibArticle;
 };
 
-type State = {};
+type State = Record<string, never>;
 
 class CodeLibArticleViewer extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -30,9 +29,6 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
           <h2>overview</h2>
           <p className="text">{this.props.article.overview}</p>
         </div>
-
-        {/* <h2>usage</h2>
-          <pre>usage</pre> */}
 
         {this.props.article.verified ? (
           <div>

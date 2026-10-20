@@ -14,9 +14,9 @@ import Style from './style.module.scss';
 
 //
 
-type Props = {};
+type Props = Record<string, never>;
 
-type State = {};
+type State = Record<string, never>;
 
 //
 
