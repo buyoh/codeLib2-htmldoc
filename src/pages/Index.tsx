@@ -5,8 +5,6 @@ import '../style/page.scss';
 import Styles from './style.module.scss';
 import { RootState } from '../stores';
 import { CodeLibArticle } from '../lib/CodeLib/types';
-import * as CodeLibActions from '../stores/codelib/actions';
-import CodeLib from '../lib/CodeLib';
 import SideSearchFrame from '../containers/SideSearchFrame/';
 import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
 import { Routes, Route } from 'react-router';
@@ -26,9 +24,7 @@ type StateProps = {
   codeLibArticles: Array<CodeLibArticle>;
 };
 
-type DispatchProps = {
-  onFetchCodeLibData: (items: Array<CodeLibArticle>) => void;
-};
+type DispatchProps = object; // Empty.
 
 type CombinedProps = Props & StateProps & DispatchProps;
 
@@ -40,11 +36,8 @@ function mapStateToProps(state: RootState): StateProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
-  return {
-    onFetchCodeLibData: (items: Array<CodeLibArticle>) =>
-      dispatch(CodeLibActions.setItems(items)),
-  };
+function mapDispatchToProps(_dispatch: Dispatch): DispatchProps {
+  return {};
 }
 
 //
@@ -53,13 +46,6 @@ class Index extends React.Component<CombinedProps, State> {
   constructor(props: CombinedProps) {
     super(props);
     this.state = {};
-  }
-
-  componentDidMount(): void {
-    (async () => {
-      const items = await CodeLib.fetchAll();
-      this.props.onFetchCodeLibData(items);
-    })();
   }
 
   // componentWillUnmount(): void  // for unscribe
