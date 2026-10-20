@@ -9,7 +9,9 @@
     "esModuleInterop": true,
     "jsx": "react",
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    // vitest の型定義が moduleResolution: node では解決できないため
+    "skipLibCheck": true
   },
   "include": [
     "**/*.ts",

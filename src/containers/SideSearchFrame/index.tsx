@@ -5,12 +5,14 @@ import '../../style/page.scss';
 import { RootState } from '../../stores';
 import { CodeLibArticle } from '../../lib/CodeLib/types';
 import * as SearchBoxActions from '../../stores/searchbox/actions';
-import * as Impl from './impl';
+import { selectFilteredArticles } from '../../stores/selectors';
+import { articleUrl } from '../../lib/CodeLib/url';
 import SnippetListItem from '../../components/SnippetListItem';
 import SnippetList from '../../components/SnippetList';
 import TextInput from '../../components/TextInput';
 import Select from '../../components/Select';
 import Style from './style.module.scss';
+import { LanguageOption, selectLanguageOptions } from './impl';
 
 //
 
@@ -22,6 +24,7 @@ type State = Record<string, never>;
 
 type StateProps = {
   codeLibArticles: Array<CodeLibArticle>;
+  languageOptions: Array<LanguageOption>;
   searchBoxKeyword: string;
   searchBoxLang: string;
 };
@@ -37,11 +40,8 @@ type CombinedProps = Props & StateProps & DispatchProps;
 
 function mapStateToProps(state: RootState): StateProps {
   return {
-    codeLibArticles: Impl.filterCodeLibArticles(
-      state.codeLib.items,
-      state.searchBox.keyword,
-      state.searchBox.lang
-    ).sort((l, r) => l.path.localeCompare(r.path)),
+    codeLibArticles: selectFilteredArticles(state),
+    languageOptions: selectLanguageOptions(state),
     searchBoxKeyword: state.searchBox.keyword,
     searchBoxLang: state.searchBox.lang,
   };
@@ -57,32 +57,6 @@ function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
 }
 
 //
-
-function getLanguageList() {
-  // todo: jsonから読み込むようにする
-  return [
-    {
-      value: '',
-      label: 'all',
-    },
-    {
-      value: 'cpp',
-      label: 'C++',
-    },
-    {
-      value: 'javascript',
-      label: 'JS',
-    },
-    {
-      value: 'ruby',
-      label: 'Ruby',
-    },
-    {
-      value: 'rust',
-      label: 'Rust',
-    },
-  ];
-}
 
 class SideSearchFrame extends React.Component<CombinedProps, State> {
   constructor(props: CombinedProps) {
@@ -119,21 +93,19 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
             <Select
               value={this.props.searchBoxLang}
               onChange={this.handleChangeSearchBoxLang}
-              options={getLanguageList().map((e) => ({ ...e, key: e.value }))}
+              options={this.props.languageOptions}
             />
           </div>
         </div>
         <div className={'flex nooverflow ' + Style.scrollableY_forDesktop}>
           <SnippetList>
-            {this.props.codeLibArticles
-              ? this.props.codeLibArticles.map((item) => (
-                  <SnippetListItem
-                    article={item}
-                    linkto={`${item.path}.html`}
-                    key={item.path}
-                  />
-                ))
-              : null}
+            {this.props.codeLibArticles.map((item) => (
+              <SnippetListItem
+                article={item}
+                linkto={articleUrl(item.path)}
+                key={item.path}
+              />
+            ))}
           </SnippetList>
         </div>
       </>

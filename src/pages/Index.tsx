@@ -1,15 +1,11 @@
 import React from 'react';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import '../style/page.scss';
 import Styles from './style.module.scss';
-import { RootState } from '../stores';
-import { CodeLibArticle } from '../lib/CodeLib/types';
 import SideSearchFrame from '../containers/SideSearchFrame/';
-import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
 import { Routes, Route } from 'react-router';
-import TopContentFrame from '../containers/TopContentFrame';
+import ArticleRoute from '../containers/ArticleRoute';
 import FetchCodeLib from '../containers/FetchCodeLib';
+import FetchErrorNotice from '../containers/FetchErrorNotice';
 import Header from '../components/Header';
 
 //
@@ -20,35 +16,11 @@ type State = Record<string, never>;
 
 //
 
-type StateProps = {
-  codeLibArticles: Array<CodeLibArticle>;
-};
-
-type DispatchProps = object; // Empty.
-
-type CombinedProps = Props & StateProps & DispatchProps;
-
-//
-
-function mapStateToProps(state: RootState): StateProps {
-  return {
-    codeLibArticles: state.codeLib.items,
-  };
-}
-
-function mapDispatchToProps(_dispatch: Dispatch): DispatchProps {
-  return {};
-}
-
-//
-
-class Index extends React.Component<CombinedProps, State> {
-  constructor(props: CombinedProps) {
+class Index extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {};
   }
-
-  // componentWillUnmount(): void  // for unscribe
 
   render(): JSX.Element {
     return (
@@ -59,15 +31,9 @@ class Index extends React.Component<CombinedProps, State> {
         </div>
         <div className={Styles.layoutFullFrame}>
           <div className={Styles.layoutMainPageFrame}>
+            <FetchErrorNotice />
             <Routes>
-              {this.props.codeLibArticles.map((a) => (
-                <Route
-                  path={`${a.path}.html`}
-                  key={a.path}
-                  element={<CodeLibArticleViewer article={a} />}
-                />
-              ))}
-              <Route path="*" element={<TopContentFrame />} />
+              <Route path="*" element={<ArticleRoute />} />
             </Routes>
           </div>
           <div className={Styles.layoutSideSearchFrame}>
@@ -79,7 +45,4 @@ class Index extends React.Component<CombinedProps, State> {
   }
 }
 
-export default connect<StateProps, DispatchProps, Props, RootState>(
-  mapStateToProps,
-  mapDispatchToProps
-)(Index);
+export default Index;

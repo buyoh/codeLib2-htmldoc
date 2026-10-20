@@ -1,48 +1,28 @@
-import { CodeLibArticle } from '../../lib/CodeLib/types';
+import { createSelector } from 'reselect';
+import { selectLanguages } from '../../stores/selectors';
 
-function testArticleByLang(a: CodeLibArticle, lang: string) {
-  return !lang || a.lang === lang;
-}
+export type LanguageOption = {
+  key: string;
+  label: string;
+  value: string;
+};
 
-function testArticleByKeyRe(a: CodeLibArticle, re: RegExp) {
-  return (
-    re.test(a.path) ||
-    a.words?.some((word) => re.test(word)) ||
-    re.test(a.title)
-  );
-}
+const languageLabels: Readonly<Record<string, string>> = {
+  cpp: 'C++',
+  javascript: 'JS',
+  ruby: 'Ruby',
+  rust: 'Rust',
+};
 
-function testArticleByKeyStr(a: CodeLibArticle, key: string) {
-  return (
-    a.path.includes(key) ||
-    a.words?.some((word) => word.includes(key)) ||
-    a.title.includes(key)
-  );
-}
-
-export function filterCodeLibArticles(
-  items: ReadonlyArray<CodeLibArticle>,
-  keyword: string,
-  lang: string
-): Array<CodeLibArticle> {
-  if (!keyword)
-    return items.filter((article) => testArticleByLang(article, lang));
-  let reg = null as RegExp | null;
-  try {
-    reg = new RegExp(keyword, 'i');
-  } catch {
-    //
-  }
-  if (reg !== null) {
-    const re = reg;
-    return items.filter(
-      (article) =>
-        testArticleByLang(article, lang) && testArticleByKeyRe(article, re)
-    );
-  } else
-    return items.filter(
-      (article) =>
-        testArticleByLang(article, lang) &&
-        testArticleByKeyStr(article, keyword)
-    );
-}
+// 言語選択肢。先頭は全言語を表す 'all'
+export const selectLanguageOptions = createSelector(
+  [selectLanguages],
+  (langs): Array<LanguageOption> => [
+    { key: '', value: '', label: 'all' },
+    ...langs.map((lang) => ({
+      key: lang,
+      value: lang,
+      label: languageLabels[lang] ?? lang,
+    })),
+  ]
+);

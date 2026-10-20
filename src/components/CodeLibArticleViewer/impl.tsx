@@ -1,6 +1,7 @@
 import React from 'react';
 import ExternalLink from '../ExternalLink';
 import { Link } from 'react-router';
+import { articleUrl, isExternalUrl } from '../../lib/CodeLib/url';
 
 function prependSlash(text: string): string {
   return text.startsWith('/') ? text : '/' + text;
@@ -9,9 +10,9 @@ function prependSlash(text: string): string {
 export function convertToReferenceList(texts: Array<string>): JSX.Element {
   return (
     <ul>
-      {texts.map((line) => (
-        <li key={line}>
-          {line.startsWith('http') ? (
+      {texts.map((line, i) => (
+        <li key={`${i}:${line}`}>
+          {isExternalUrl(line) ? (
             <ExternalLink to={line}>{line}</ExternalLink>
           ) : (
             `${line}\n`
@@ -23,33 +24,27 @@ export function convertToReferenceList(texts: Array<string>): JSX.Element {
 }
 
 export function convertToRequireList(text: string): JSX.Element {
-  const dom: Array<{ link: boolean; text: string; key: string }> = [];
+  const dom: Array<{ link: boolean; text: string }> = [];
   const re = /src\/[0-9a-zA-Z/._-]+/g;
   let m: RegExpExecArray | null = null;
   let lastIndex = 0;
   while ((m = re.exec(text)) !== null) {
     const l = m[0].length;
-    const nt = text.slice(lastIndex, m.index);
-    const lt = text.slice(m.index, m.index + l);
-    dom.push({ link: false, text: nt, key: nt + lt });
-    dom.push({ link: true, text: lt, key: lt + nt });
+    dom.push({ link: false, text: text.slice(lastIndex, m.index) });
+    dom.push({ link: true, text: text.slice(m.index, m.index + l) });
     lastIndex = m.index + l;
   }
-  dom.push({
-    link: false,
-    text: text.slice(lastIndex),
-    key: text.slice(lastIndex),
-  });
+  dom.push({ link: false, text: text.slice(lastIndex) });
 
   return (
     <div>
-      {dom.map((e) =>
+      {dom.map((e, i) =>
         e.link ? (
-          <Link to={prependSlash(e.text) + '.html'} key={e.key}>
+          <Link to={articleUrl(prependSlash(e.text))} key={i}>
             {e.text}
           </Link>
         ) : (
-          e.text
+          <React.Fragment key={i}>{e.text}</React.Fragment>
         )
       )}
     </div>

@@ -8,60 +8,71 @@ import CodeLib from '../../lib/CodeLib';
 
 //
 
-type Props = Record<string, never>;
+type Props = object; // Empty.
 
 type State = Record<string, never>;
 
 //
 
-type StateProps = {
-  codeLibItems: CodeLibArticle[];
-};
-
 type DispatchProps = {
-  onFetchCodeLibData: (items: Array<CodeLibArticle>) => void;
+  onFetchStarted: () => void;
+  onFetchSucceeded: (items: Array<CodeLibArticle>) => void;
+  onFetchFailed: (error: string) => void;
 };
 
-type CombinedProps = Props & StateProps & DispatchProps;
+type CombinedProps = Props & DispatchProps;
 
 //
-
-function mapStateToProps(state: RootState): StateProps {
-  return {
-    codeLibItems: state.codeLib.items,
-  };
-}
 
 function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
-    onFetchCodeLibData: (items: Array<CodeLibArticle>) =>
-      dispatch(CodeLibActions.setItems(items)),
+    onFetchStarted: () => dispatch(CodeLibActions.fetchStarted()),
+    onFetchSucceeded: (items: Array<CodeLibArticle>) =>
+      dispatch(CodeLibActions.fetchSucceeded(items)),
+    onFetchFailed: (error: string) =>
+      dispatch(CodeLibActions.fetchFailed(error)),
   };
 }
 
 //
 
-class FetchCodeLib extends React.Component<CombinedProps, State> {
+export class FetchCodeLib extends React.Component<CombinedProps, State> {
+  // 最新の取得要求の番号。古い要求や unmount 後の結果は破棄する
+  private requestId = 0;
+
   constructor(props: CombinedProps) {
     super(props);
     this.state = {};
   }
 
   componentDidMount(): void {
-    (async () => {
-      const items = await CodeLib.fetchAll();
-      this.props.onFetchCodeLibData(items);
-    })();
+    this.load();
   }
 
-  // componentWillUnmount(): void  // for unscribe
+  componentWillUnmount(): void {
+    this.requestId++;
+  }
+
+  private async load(): Promise<void> {
+    const requestId = ++this.requestId;
+    this.props.onFetchStarted();
+    try {
+      const items = await CodeLib.fetchAll();
+      if (requestId !== this.requestId) return;
+      this.props.onFetchSucceeded(items);
+    } catch (e) {
+      if (requestId !== this.requestId) return;
+      console.error(e);
+      this.props.onFetchFailed(e instanceof Error ? e.message : String(e));
+    }
+  }
 
   render(): JSX.Element {
     return <></>;
   }
 }
 
-export default connect<StateProps, DispatchProps, Props, RootState>(
-  mapStateToProps,
+export default connect<object, DispatchProps, Props, RootState>(
+  null,
   mapDispatchToProps
 )(FetchCodeLib);

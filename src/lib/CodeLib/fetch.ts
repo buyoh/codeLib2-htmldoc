@@ -1,20 +1,25 @@
 import config from '../Config';
-import { checkCodeLibArticle, CodeLibArticle } from './types';
+import { parseCodeLibArticles } from './parse';
+import { CodeLibArticle } from './types';
 
 export async function fetchAll(): Promise<Array<CodeLibArticle>> {
-  const responce = await fetch(
+  const response = await fetch(
     config.rootDirectory + '/data/codelib_full.json'
   );
-  if (!responce.ok) throw Error('fetch codelib: fetch failed');
-  const json = await responce.json();
-  if (
-    !Array.isArray(json) ||
-    (config.validate && !json.every(checkCodeLibArticle))
-  ) {
-    setTimeout(() => {
-      alert('type of codelib data validation Error!!');
-    }, 0);
-    throw Error('fetch codelib: type validation Error');
+  if (!response.ok)
+    throw Error(`fetch codelib: fetch failed (status ${response.status})`);
+  let json: unknown;
+  try {
+    json = await response.json();
+  } catch {
+    throw Error('fetch codelib: invalid JSON');
   }
-  return json as Array<CodeLibArticle>;
+  const result = parseCodeLibArticles(json);
+  result.invalids.forEach((invalid) =>
+    invalid.messages.forEach((m) =>
+      console.warn(`codelib article #${invalid.index}: ${m}`)
+    )
+  );
+  if (!result.ok) throw Error(`fetch codelib: ${result.error}`);
+  return result.articles;
 }

@@ -68,8 +68,8 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
         <div>
           <h2>commits</h2>
           {this.props.article.commits.map((com) => (
-            <div style={{ fontFamily: 'monospace' }} key={com.date}>
-              {com.sha.substr(0, 8)}({com.date}): {com.message}
+            <div style={{ fontFamily: 'monospace' }} key={com.sha}>
+              {com.sha.slice(0, 8)}({com.date}): {com.message}
             </div>
           ))}
         </div>

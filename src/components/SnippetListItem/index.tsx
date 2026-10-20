@@ -22,7 +22,9 @@ class SnippetListItem extends React.Component<Props, State> {
       <div className={Styles.item}>
         <div className={Styles.title}>
           <Link to={this.props.linkto}>{article.title}</Link>
-          {article.tested_by.length > 0 ? <Badge text="✅" alt="tested" /> : ''}
+          {article.tested_by.length > 0 ? (
+            <Badge text="✅" alt="tested" />
+          ) : null}
         </div>
         <div className={Styles.path}>{article.path}</div>
       </div>

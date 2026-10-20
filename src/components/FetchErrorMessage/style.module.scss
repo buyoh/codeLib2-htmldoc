@@ -1,0 +1,15 @@
+@use "./../../style/color.scss";
+
+.fetchError {
+  margin: 10px 30px;
+  padding: 8px 12px;
+  border: 2px solid color.$fontcolorstrong;
+  background-color: color.$bg1color;
+  color: color.$fontcolor;
+}
+.detail {
+  margin-top: 4px;
+  color: color.$fontcolorweak;
+  font-family: monospace;
+  font-size: 0.85em;
+}
