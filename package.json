@@ -13,8 +13,9 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "build": "TS_NODE_PROJECT='tsconfig.prod.json' webpack --config webpack.prod.config.js",
-    "dev": "webpack serve",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc --noEmit -p tsconfig.prod.json && TS_NODE_PROJECT='tsconfig.prod.json' webpack --config webpack.prod.config.js",
+    "dev": "pnpm typecheck && webpack serve",
     "lint": "prettier --check 'src/**/*.ts' 'src/**/*.tsx' && eslint src/**/*.ts",
     "lint-fix": "prettier --write 'src/**/*.ts' 'src/**/*.tsx'"
   },

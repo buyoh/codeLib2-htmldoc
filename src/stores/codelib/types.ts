@@ -6,9 +6,9 @@ export interface CodeLibState {
 
 export const SET_ITEMS = 'codelib-setitems';
 
-interface AddCodeLibArticlesAction {
+type AddCodeLibArticlesAction = {
   type: typeof SET_ITEMS;
   items: Array<CodeLibArticle>;
-}
+};
 
 export type CodeLibActionTypes = AddCodeLibArticlesAction;
