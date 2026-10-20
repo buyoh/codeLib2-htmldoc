@@ -5,6 +5,8 @@ on: [push, pull_request]
 jobs:
   build:
 
+    permissions: 
+      contents: read
     runs-on: ubuntu-24.04
     
     steps:
@@ -30,15 +32,18 @@ jobs:
         pnpm install --frozen-lockfile
     - name: lint javascript
       run: |
-        pnpm lint-fix
-    - name: commit phase
-      run: |
-        if [ `git diff | wc -l` -ne 0 ] ; then
-        echo detect diff
-        git add .
-        git commit -m 'lint-fix by Github Actions'
-        fi
-    - name: push
-      uses: ad-m/github-push-action@v0.8.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        pnpm lint
+    # - name: lint javascript
+    #   run: |
+    #     pnpm lint-fix
+    # - name: commit phase
+    #   run: |
+    #     if [ `git diff | wc -l` -ne 0 ] ; then
+    #     echo detect diff
+    #     git add .
+    #     git commit -m 'lint-fix by Github Actions'
+    #     fi
+    # - name: push
+    #   uses: ad-m/github-push-action@v0.8.0
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
