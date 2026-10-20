@@ -1,6 +1,6 @@
 import React from 'react';
 import Styles from './style.module.scss';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { CodeLibArticle } from '../../lib/CodeLib/types';
 import Badge from '../Badge';
 

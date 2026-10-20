@@ -2,6 +2,7 @@ import React from 'react';
 
 type Props = {
   to: string;
+  children?: React.ReactNode;
 };
 
 type State = {};

@@ -13,7 +13,9 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: develop
-    - uses: actions/setup-node@v1
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v6.1.0
+    - uses: actions/setup-node@v6
       with:
         node-version: '20'
     - name: Please tell me who you are.
@@ -26,19 +28,19 @@ jobs:
     #     git submodule update
     - name: upgrade packages (light)
       run: |
-        yarn upgrade
+        pnpm update
     - name: presubmit
       id: presubmit
       run: |
         ./presubmit.sh
         ./presubmit.sh
         # # test launch develop
-        # PORT=3030 timeout 20 yarn dev || [[ $? -eq 124 ]]
+        # PORT=3030 timeout 20 pnpm dev || [[ $? -eq 124 ]]
     - name: commit phase
       if: "${{ steps.presubmit.conclusion != 'skip' }}"
       run: |
         if [ `git diff | wc -l` -ne 0 ] ; then
-        git add package.json yarn.lock
+        git add package.json pnpm-lock.yaml
         git commit -m 'upgrade by Github Actions'
         fi
     - name: push

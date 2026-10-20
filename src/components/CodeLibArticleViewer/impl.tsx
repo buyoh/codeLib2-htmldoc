@@ -1,6 +1,6 @@
 import React from 'react';
 import ExternalLink from '../ExternalLink';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 function prependSlash(text: string): string {
   return text.startsWith('/') ? text : '/' + text;

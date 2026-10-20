@@ -11,8 +11,10 @@ module.exports = {
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: __dirname + '/public',
-    contentBasePublicPath: '/codeLib2',
+    static: {
+      directory: __dirname + '/public',
+      publicPath: '/codeLib2',
+    },
     port: 8020,
     historyApiFallback: {
       rewrites: [

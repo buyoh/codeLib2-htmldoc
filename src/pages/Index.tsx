@@ -9,7 +9,7 @@ import * as CodeLibActions from '../stores/codelib/actions';
 import CodeLib from '../lib/CodeLib';
 import SideSearchFrame from '../containers/SideSearchFrame/';
 import CodeLibArticleViewer from '../components/CodeLibArticleViewer';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router';
 import TopContentFrame from '../containers/TopContentFrame';
 import FetchCodeLib from '../containers/FetchCodeLib';
 import Header from '../components/Header';
@@ -73,16 +73,16 @@ class Index extends React.Component<CombinedProps, State> {
         </div>
         <div className={Styles.layoutFullFrame}>
           <div className={Styles.layoutMainPageFrame}>
-            <Switch>
+            <Routes>
               {this.props.codeLibArticles.map((a) => (
-                <Route path={`${a.path}.html`} key={a.path}>
-                  <CodeLibArticleViewer article={a} />
-                </Route>
+                <Route
+                  path={`${a.path}.html`}
+                  key={a.path}
+                  element={<CodeLibArticleViewer article={a} />}
+                />
               ))}
-              <Route path={'/'} key="/">
-                <TopContentFrame />
-              </Route>
-            </Switch>
+              <Route path="*" element={<TopContentFrame />} />
+            </Routes>
           </div>
           <div className={Styles.layoutSideSearchFrame}>
             <SideSearchFrame />
