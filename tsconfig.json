@@ -1,21 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2019",
-    "module": "CommonJS",
-    "noImplicitAny": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "jsx": "react",
-    "moduleResolution": "node",
+    "jsx": "react-jsx",
     "resolveJsonModule": true,
-    // vitest の型定義が moduleResolution: node では解決できないため
-    "skipLibCheck": true
+    "isolatedModules": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.css",
-    "**/*.scss",
-  ]
+  "include": ["src"]
 }

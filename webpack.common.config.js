@@ -38,9 +38,21 @@ module.exports = {
         test: /\.scss$/,
         use: [
           { loader: 'style-loader' },
-          { loader: 'css-modules-typescript-loader' },
-          { loader: 'css-loader' },
-          { loader: 'sass-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              // *.module.scss のみ CSS Modules。default import 形式を維持する
+              modules: {
+                auto: true,
+                namedExport: false,
+                exportLocalsConvention: 'as-is',
+              },
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: { api: 'modern-compiler' },
+          },
         ],
       },
       {

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RootState } from '../../stores';
+import { AppDispatch, RootState } from '../../stores';
 import { CodeLibArticle } from '../../lib/CodeLib/types';
 import * as CodeLibActions from '../../stores/codelib/actions';
 import CodeLib from '../../lib/CodeLib';
@@ -24,7 +23,7 @@ type CombinedProps = Props & DispatchProps;
 
 //
 
-function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+function mapDispatchToProps(dispatch: AppDispatch): DispatchProps {
   return {
     onFetchStarted: () => dispatch(CodeLibActions.fetchStarted()),
     onFetchSucceeded: (items: Array<CodeLibArticle>) =>

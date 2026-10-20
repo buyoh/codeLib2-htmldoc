@@ -1,8 +1,7 @@
 import React, { ChangeEvent } from 'react';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import '../../style/page.scss';
-import { RootState } from '../../stores';
+import { AppDispatch, RootState } from '../../stores';
 import { CodeLibArticle } from '../../lib/CodeLib/types';
 import * as SearchBoxActions from '../../stores/searchbox/actions';
 import { selectFilteredArticles } from '../../stores/selectors';
@@ -47,7 +46,7 @@ function mapStateToProps(state: RootState): StateProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+function mapDispatchToProps(dispatch: AppDispatch): DispatchProps {
   return {
     onChangeSearchBoxKeyword: (keyword: string) =>
       dispatch(SearchBoxActions.updateKeyword(keyword)),
