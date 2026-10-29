@@ -8,7 +8,10 @@ import Config from './lib/Config';
 import ErrorBoundary from './components/ErrorBoundary';
 import RenderErrorMessage from './components/RenderErrorMessage';
 
-createRoot(document.getElementById('react') as HTMLElement).render(
+const container = document.getElementById('react');
+if (container === null) throw Error('element #react is not found');
+
+createRoot(container).render(
   <React.StrictMode>
     {/* ルータ外のため、トップへの導線は再読み込みを伴う <a> にする */}
     <ErrorBoundary

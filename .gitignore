@@ -1,5 +1,5 @@
-/public/bundle.js
-/public/bundle.js.LICENSE.txt
+/public/*
+!/public/data/
 
 # Logs
 logs

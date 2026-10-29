@@ -1,4 +1,7 @@
 const process = require('process');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+// 公開ルートは src/config.json を唯一の情報源とする
+const { rootDirectory } = require('./src/config.json');
 const tsconfig_json = process.env.TS_NODE_PROJECT || 'tsconfig.json';
 console.log('tsconfig', tsconfig_json);
 
@@ -7,18 +10,23 @@ module.exports = {
   entry: './src/App.tsx',
   output: {
     path: __dirname + '/public/',
-    publicPath: '/codeLib2',
-    filename: 'bundle.js'
+    publicPath: rootDirectory + '/',
+    filename: 'bundle.[contenthash].js',
+    // 古いバンドルを残さない。public/data は生成物ではないため残す
+    clean: { keep: /^data\// },
   },
+  plugins: [
+    new HtmlWebpackPlugin({ template: './src/index.html' }),
+  ],
   devServer: {
     static: {
       directory: __dirname + '/public',
-      publicPath: '/codeLib2',
+      publicPath: rootDirectory,
     },
     port: 8020,
     historyApiFallback: {
       rewrites: [
-        { from: /./, to: '/codeLib2/index.html' }
+        { from: /./, to: rootDirectory + '/index.html' }
       ]
     }
   },

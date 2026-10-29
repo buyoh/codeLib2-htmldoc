@@ -32,7 +32,11 @@ jobs:
     - name: build
       run: |
         pnpm build
+    # dev server の配信設定（publicPath・historyApiFallback・HtmlWebpackPlugin）を確認する
     - name: run
       run: |
-        timeout 20 pnpm dev || [[ $? -eq 124 ]]
+        pnpm dev &
+        html=$(curl -sf --retry 30 --retry-connrefused --retry-delay 2 http://localhost:8020/codeLib2/src/sample.html)
+        bundle=$(grep -o 'bundle\.[0-9a-f]*\.js' <<< "$html")
+        curl -sf -o /dev/null "http://localhost:8020/codeLib2/$bundle"
 

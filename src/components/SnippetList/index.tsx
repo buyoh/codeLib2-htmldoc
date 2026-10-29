@@ -12,7 +12,7 @@ class SnippetList extends React.Component<Props, State> {
   }
 
   render(): JSX.Element {
-    return <div style={{}}>{this.props.children}</div>;
+    return <div>{this.props.children}</div>;
   }
 }
 

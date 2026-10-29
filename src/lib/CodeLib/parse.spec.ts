@@ -46,6 +46,35 @@ describe('parseCodeLibArticles', () => {
     expect(result.invalids.map((i) => i.index)).toEqual([1]);
   });
 
+  it('accepts a path made of safe segments', () => {
+    const result = parseCodeLibArticles([
+      rawArticle({ path: '/cpp/a.b/c_d-e' }),
+    ]);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.invalids).toEqual([]);
+  });
+
+  it.each([
+    '//evil.example/x',
+    '/a//b',
+    '/a/',
+    '/',
+    '/a/../b',
+    '/..',
+    '/./a',
+    '/a b',
+    '/a?b',
+    '/a#b',
+    '/a\\b',
+  ])('rejects a path that could escape the root: %s', (path) => {
+    const json = [rawArticle({ path: '/a' }), rawArticle({ path })];
+    const result = parseCodeLibArticles(json);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.invalids.map((i) => i.index)).toEqual([1]);
+  });
+
   it('keeps optional fields as decoded values', () => {
     const json = [
       rawArticle({ words: ['w'], references: ['https://example.com'] }),

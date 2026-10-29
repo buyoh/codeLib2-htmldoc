@@ -15,7 +15,12 @@ function renderView(view: ArticleView): JSX.Element | null {
     case 'top':
       return <TopContentFrame />;
     case 'article':
-      return <CodeLibArticleViewer article={view.article} />;
+      return (
+        <CodeLibArticleViewer
+          article={view.article}
+          origin={window.location.origin}
+        />
+      );
     case 'notFound':
       return <NotFound />;
     case 'pending':

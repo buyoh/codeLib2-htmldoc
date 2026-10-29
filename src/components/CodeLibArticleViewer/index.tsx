@@ -8,6 +8,8 @@ import { articleAbsoluteUrl } from '../../lib/CodeLib/url';
 
 type Props = {
   article: CodeLibArticle;
+  // 記事の絶対 URL を組み立てるための origin (例: https://hostname)
+  origin: string;
 };
 
 type State = Record<string, never>;
@@ -22,7 +24,7 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
       <ArticleViewFrame>
         <h1>{this.props.article.title}</h1>
         <div>
-          <Badge text={this.props.article.lang} style={1}></Badge>
+          <Badge text={this.props.article.lang} variant="primary"></Badge>
         </div>
         <div>keyword:{this.props.article.words?.join(' ')}</div>
         <hr />
@@ -66,10 +68,7 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
             value={prependUrlComment(
               this.props.article.code,
               this.props.article.lang,
-              articleAbsoluteUrl(
-                window.location.origin,
-                this.props.article.path
-              )
+              articleAbsoluteUrl(this.props.origin, this.props.article.path)
             )}
           />
         </div>

@@ -27,7 +27,7 @@ export function filterCodeLibArticles(
 ): Array<CodeLibArticle> {
   if (!keyword)
     return items.filter((article) => testArticleByLang(article, lang));
-  let reg = null as RegExp | null;
+  let reg: RegExp | null = null;
   try {
     reg = new RegExp(keyword, 'i');
   } catch {

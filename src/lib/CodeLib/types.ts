@@ -4,10 +4,21 @@ interface ArticlePathBrand {
   readonly ArticlePath: unique symbol;
 }
 
-// 記事の path は '/' 始まりであることを codec で保証する
+// 記事の path は '/' 始まりの相対パス風の文字列に限る（allowlist）。
+// '//host' のような外部 URL や '.' '..' セグメントによるパストラバーサルを防ぐ。
+// tools/generate_release_directory.rb でも同じ条件で検証している
+const ARTICLE_PATH_PATTERN = /^\/(?:[A-Za-z0-9_.-]+\/)*[A-Za-z0-9_.-]+$/;
+
+export function isValidArticlePath(s: string): boolean {
+  return (
+    ARTICLE_PATH_PATTERN.test(s) &&
+    s.split('/').every((seg) => seg !== '.' && seg !== '..')
+  );
+}
+
 const articlePath = t.brand(
   t.string,
-  (s): s is t.Branded<string, ArticlePathBrand> => s.startsWith('/'),
+  (s): s is t.Branded<string, ArticlePathBrand> => isValidArticlePath(s),
   'ArticlePath'
 );
 
