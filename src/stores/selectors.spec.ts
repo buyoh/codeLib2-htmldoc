@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { rootReducer, RootState } from '.';
+import { createRootStore, rootReducer, RootState } from '.';
 import * as CodeLibActions from './codelib/actions';
 import * as SearchBoxActions from './searchbox/actions';
 import {
@@ -66,7 +66,7 @@ describe('selectLanguages', () => {
   });
 
   it('returns an empty list before loading', () => {
-    const initial = rootReducer(undefined, { type: '@@INIT' } as never);
+    const initial = createRootStore().getState();
     expect(selectLanguages(initial)).toEqual([]);
   });
 });

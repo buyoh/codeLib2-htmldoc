@@ -1,10 +1,9 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { afterEach, describe, expect, it } from 'vitest';
-import { rootReducer } from '../../stores';
+import { createRootStore } from '../../stores';
 import * as CodeLibActions from '../../stores/codelib/actions';
 import ArticleRoute from '.';
 import FetchErrorNotice from '../FetchErrorNotice';
@@ -13,7 +12,7 @@ import { makeArticle } from '../../test/fixtures';
 
 const article = makeArticle({ path: '/cpp/sample', title: 'Sample Title' });
 
-function renderAt(pathname: string, store = createStore(rootReducer)) {
+function renderAt(pathname: string, store = createRootStore()) {
   const r = render(
     <Provider store={store}>
       <MemoryRouter initialEntries={[pathname]}>
@@ -33,7 +32,7 @@ describe('ArticleRoute', () => {
   });
 
   it('renders nothing for an article url while loading', () => {
-    const store = createStore(rootReducer);
+    const store = createRootStore();
     store.dispatch(CodeLibActions.fetchStarted());
     const r = renderAt('/cpp/sample.html', store);
     expect(r.container.textContent).toBe('');
@@ -41,7 +40,7 @@ describe('ArticleRoute', () => {
   });
 
   it('renders the article once loaded', () => {
-    const store = createStore(rootReducer);
+    const store = createRootStore();
     store.dispatch(CodeLibActions.fetchStarted());
     const r = renderAt('/cpp/sample.html', store);
     React.act(() => {
@@ -52,7 +51,7 @@ describe('ArticleRoute', () => {
   });
 
   it('renders not found for an unknown article after loading', () => {
-    const store = createStore(rootReducer);
+    const store = createRootStore();
     store.dispatch(CodeLibActions.fetchSucceeded([article]));
     const r = renderAt('/cpp/unknown.html', store);
     expect(r.container.querySelector('h1')?.textContent).toBe(
@@ -68,7 +67,7 @@ describe('ArticleRoute', () => {
   });
 
   it('shows the fetch error and keeps the article area empty', () => {
-    const store = createStore(rootReducer);
+    const store = createRootStore();
     store.dispatch(CodeLibActions.fetchFailed('fetch codelib: boom'));
     const r = renderAt('/cpp/sample.html', store);
     const alert = r.container.querySelector('[role="alert"]');
@@ -78,7 +77,7 @@ describe('ArticleRoute', () => {
   });
 
   it('does not show the fetch error when loaded', () => {
-    const store = createStore(rootReducer);
+    const store = createRootStore();
     store.dispatch(CodeLibActions.fetchSucceeded([article]));
     const r = renderAt('/', store);
     expect(r.container.querySelector('[role="alert"]')).toBeNull();
@@ -93,7 +92,7 @@ describe('ArticleRoute', () => {
         ...article,
         commits: undefined,
       } as unknown as typeof article;
-      const store = createStore(rootReducer);
+      const store = createRootStore();
       store.dispatch(CodeLibActions.fetchSucceeded([broken]));
       const r = renderAt('/cpp/sample.html', store);
       expect(r.container.querySelector('h1')?.textContent).toBe(
@@ -118,7 +117,7 @@ describe('ArticleRoute', () => {
   });
 
   it('resolves articles and links under the production basename', () => {
-    const store = createStore(rootReducer);
+    const store = createRootStore();
     store.dispatch(CodeLibActions.fetchSucceeded([article]));
     const tree = (pathname: string) => (
       <Provider store={store}>

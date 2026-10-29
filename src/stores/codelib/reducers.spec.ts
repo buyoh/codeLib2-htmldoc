@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { codeLibReducer } from './reducers';
 import * as Actions from './actions';
+import { codeLibSlice } from './slice';
 import { makeArticle } from '../../test/fixtures';
 
-const init = () => codeLibReducer(undefined, { type: '@@INIT' } as never);
+const init = () => codeLibSlice.getInitialState();
 
 describe('codeLibReducer', () => {
   it('starts idle with no items', () => {

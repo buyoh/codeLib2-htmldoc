@@ -1,10 +1,9 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import { rootReducer } from '../../stores';
+import { createRootStore } from '../../stores';
 import * as CodeLibActions from '../../stores/codelib/actions';
 import * as SearchBoxActions from '../../stores/searchbox/actions';
 import SideSearchFrame from '.';
@@ -12,7 +11,7 @@ import { render } from '../../test/render';
 import { makeArticle } from '../../test/fixtures';
 
 function setup() {
-  const store = createStore(rootReducer);
+  const store = createRootStore();
   store.dispatch(
     CodeLibActions.fetchSucceeded([
       makeArticle({ path: '/ruby/b', title: 'B', lang: 'ruby' }),

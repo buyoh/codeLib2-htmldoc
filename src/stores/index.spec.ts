@@ -12,6 +12,15 @@ describe('createRootStore', () => {
     });
   });
 
+  it('creates an independent store on each call', () => {
+    const a = createRootStore();
+    const b = createRootStore();
+    expect(a).not.toBe(b);
+    a.dispatch(SearchBoxActions.updateKeyword('seg'));
+    expect(a.getState().searchBox.keyword).toBe('seg');
+    expect(b.getState().searchBox.keyword).toBe('');
+  });
+
   it('handles the fetch lifecycle', () => {
     const store = createRootStore();
     const items = [makeArticle()];

@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { selectLanguages } from '../../stores/selectors';
 
 export type LanguageOption = {

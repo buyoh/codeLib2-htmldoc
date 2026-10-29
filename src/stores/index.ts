@@ -11,7 +11,6 @@ export function createRootStore() {
   return configureStore({ reducer: rootReducer });
 }
 
-export const rootStore = createRootStore();
-
 export type RootState = ReturnType<typeof rootReducer>;
-export type AppDispatch = typeof rootStore.dispatch;
+export type AppStore = ReturnType<typeof createRootStore>;
+export type AppDispatch = AppStore['dispatch'];

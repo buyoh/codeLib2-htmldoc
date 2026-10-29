@@ -1,12 +1,14 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { rootStore } from './stores';
+import { createRootStore } from './stores';
 import Index from './pages/Index';
 import { BrowserRouter } from 'react-router';
 import Config from './lib/Config';
 import ErrorBoundary from './components/ErrorBoundary';
 import RenderErrorMessage from './components/RenderErrorMessage';
+
+const rootStore = createRootStore();
 
 const container = document.getElementById('react');
 if (container === null) throw Error('element #react is not found');
