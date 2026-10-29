@@ -14,6 +14,7 @@
     "dev": "pnpm typecheck && webpack serve",
     "lint": "prettier --check 'src/**/*.{ts,tsx}' 'tools/**/*.mjs' && eslint 'src/**/*.{ts,tsx}' 'tools/**/*.mjs'",
     "test": "vitest run",
+    "validate-data": "CODELIB_DATA_PATH=public/data/codelib_full.json vitest run tools/validate-data.spec.mjs",
     "lint-fix": "prettier --write 'src/**/*.{ts,tsx}' 'tools/**/*.mjs' && eslint --fix 'src/**/*.{ts,tsx}' 'tools/**/*.mjs'"
   },
   "dependencies": {
