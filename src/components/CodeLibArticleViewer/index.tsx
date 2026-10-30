@@ -3,6 +3,7 @@ import { CodeLibArticle } from '../../lib/CodeLib/types';
 import ArticleViewFrame from '../ArticleViewerFrame';
 import Badge from '../Badge';
 import * as Impl from './impl';
+import Styles from './style.module.scss';
 import { prependUrlComment } from '../../lib/CodeLib/code';
 import { articleAbsoluteUrl } from '../../lib/CodeLib/url';
 
@@ -31,7 +32,7 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
 
         <div>
           <h2>overview</h2>
-          <p className="text">{this.props.article.overview}</p>
+          <p className={Styles.overview}>{this.props.article.overview}</p>
         </div>
 
         {this.props.article.verified ? (
@@ -62,7 +63,7 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
         <div>
           <h2>code</h2>
           <textarea
-            className="display"
+            className={Styles.code}
             rows={30}
             readOnly={true}
             value={prependUrlComment(
@@ -76,7 +77,7 @@ class CodeLibArticleViewer extends React.Component<Props, State> {
         <div>
           <h2>commits</h2>
           {this.props.article.commits.map((com) => (
-            <div style={{ fontFamily: 'monospace' }} key={com.sha}>
+            <div className={Styles.commit} key={com.sha}>
               {com.sha.slice(0, 8)}({com.date}): {com.message}
             </div>
           ))}

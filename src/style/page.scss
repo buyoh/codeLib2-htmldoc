@@ -54,21 +54,6 @@ pre {
   font-family: monospace;
   overflow-x: auto;
 }
-textarea.display {
-  display: block;
-  background-color: color.$codebgcolor2;
-  color: color.$codefontcolor2;
-  font-family: monospace;
-  padding: 2px 5px;
-  margin-right: 50px;
-  width: 90%;
-  white-space: pre;
-  overflow: scroll;
-  overflow-y: scroll;
-  overflow-x: scroll;
-  resize: none;
-}
-
 a {
   color: color.$fonthyperlink1;
   text-decoration: none;
@@ -87,65 +72,4 @@ code {
   padding: 2px 5px;
   border-radius: 4px;
   font-family: monospace;
-}
-.badge {
-  //background-color: color.$codebgcolor;
-  //color: color.$codefontcolor;
-  padding: 0px 5px;
-  margin: 0px 5px;
-  border: 2px solid color.$accentcolor2;
-  border-radius: 2px;
-  font-weight: bolder;
-}
-
-.text {
-  white-space: pre-line;
-}
-
-// flex
-
-.row {
-  display: flex;
-  flex-direction: row;
-}
-
-.row-reverse {
-  display: flex;
-  flex-direction: row-reverse;
-}
-
-.cols {
-  display: flex;
-  flex-direction: column;
-}
-
-.flex {
-  flex: 1 1 auto;
-}
-
-.fixedFlex {
-  flex: 0 0 auto;
-}
-
-.nooverflow {
-  overflow: hidden;
-}
-
-.scrollableY {
-  overflow-y: scroll;
-}
-.scrollableX {
-  overflow-x: scroll;
-}
-
-// TODO: remove
-
-.left {
-  float: left;
-}
-.right {
-  float: right;
-}
-.clear {
-  clear: both;
 }

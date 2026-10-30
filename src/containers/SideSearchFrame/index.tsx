@@ -1,6 +1,5 @@
 import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
-import '../../style/page.scss';
 import { AppDispatch, RootState } from '../../stores';
 import { CodeLibArticle } from '../../lib/CodeLib/types';
 import * as SearchBoxActions from '../../stores/searchbox/actions';
@@ -76,27 +75,29 @@ class SideSearchFrame extends React.Component<CombinedProps, State> {
   }
 
   render(): JSX.Element {
-    // 外枠は layoutSideSearchFrame で .cols と .nooverflow を定義
-    // cols はできればここに書きたいが、flexなdivブロックがもう１重必要になる
+    // 外枠は layoutSideSearchFrame で column 方向の flex と overflow: hidden を定義
+    // column はできればここに書きたいが、flexなdivブロックがもう１重必要になる
     return (
       <>
-        <div className="fixedFlex row">
-          <div className="flex row">
+        <div className={Style.searchBar}>
+          <div className={Style.keywordBox}>
             <TextInput
+              className={Style.searchInput}
               placeholder="キーワード検索"
               value={this.props.searchBoxKeyword}
               onChange={this.handleChangeSearchBoxKeyword}
             />
           </div>
-          <div className="fixedFlex row">
+          <div className={Style.langBox}>
             <Select
+              className={Style.searchInput}
               value={this.props.searchBoxLang}
               onChange={this.handleChangeSearchBoxLang}
               options={this.props.languageOptions}
             />
           </div>
         </div>
-        <div className={'flex nooverflow ' + Style.scrollableY_forDesktop}>
+        <div className={Style.articleList}>
           <SnippetList>
             {this.props.codeLibArticles.map((item) => (
               <SnippetListItem

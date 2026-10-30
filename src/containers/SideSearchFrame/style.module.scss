@@ -1,15 +1,38 @@
-
 @use "./../../style/screen.scss";
 
+.searchBar {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.keywordBox {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.langBox {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.searchInput {
+  flex: 1 1 auto;
+}
+
+.articleList {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
 @include screen.media(small) {
-  .scrollableY_forDesktop {
-    overflow-y: visible
+  .articleList {
+    // overflow-x が hidden なので auto として計算される
+    overflow-y: visible;
   }
 }
 
 @include screen.media(desktop) {
-
-  .scrollableY_forDesktop {
+  .articleList {
     overflow-y: scroll;
   }
 }

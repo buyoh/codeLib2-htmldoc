@@ -1,4 +1,5 @@
 import React from 'react';
+import Styles from './style.module.scss';
 
 type Props = {
   children?: React.ReactNode;
@@ -14,15 +15,7 @@ class ArticleViewFrame extends React.Component<Props, State> {
   render(): JSX.Element {
     return (
       <div>
-        <article
-          style={{
-            maxWidth: '800px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        >
-          {this.props.children}
-        </article>
+        <article className={Styles.article}>{this.props.children}</article>
       </div>
     );
   }

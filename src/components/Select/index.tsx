@@ -12,6 +12,7 @@ type Props = {
   options: Option[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   placeholder?: string;
+  className?: string;
 };
 
 type State = Record<string, never>;
@@ -24,7 +25,9 @@ class Select extends React.Component<Props, State> {
   render(): JSX.Element {
     return (
       <select
-        className={[Styles.select, 'flex'].join(' ')}
+        className={[Styles.select, this.props.className]
+          .filter(Boolean)
+          .join(' ')}
         value={this.props.value}
         onChange={this.props.onChange}
       >

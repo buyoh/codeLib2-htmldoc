@@ -99,6 +99,23 @@ describe('Index', () => {
     r.unmount();
   });
 
+  it('uses no global utility class or inline style', async () => {
+    const respond = stubFetch();
+    const r = renderAt('/cpp/sample.html');
+    await respond(Response.json(articles));
+    expect(main(r.container)?.textContent).toBe('Sample Title');
+    expect(
+      r.container.querySelector(
+        [
+          '.flex, .fixedFlex, .row, .row-reverse, .cols, .nooverflow',
+          '.scrollableY, .scrollableX, .left, .right, .clear',
+          '.badge, .text, .display, [style]',
+        ].join(', ')
+      )
+    ).toBeNull();
+    r.unmount();
+  });
+
   it('opens an article from the side list without reloading the data', async () => {
     const respond = stubFetch();
     const r = renderAt('/');

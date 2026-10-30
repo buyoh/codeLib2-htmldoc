@@ -7,6 +7,7 @@ import { createRootStore } from '../../stores';
 import * as CodeLibActions from '../../stores/codelib/actions';
 import * as SearchBoxActions from '../../stores/searchbox/actions';
 import SideSearchFrame from '.';
+import Style from './style.module.scss';
 import { render } from '../../test/render';
 import { makeArticle } from '../../test/fixtures';
 
@@ -29,6 +30,15 @@ function setup() {
 }
 
 describe('SideSearchFrame', () => {
+  it('gives the search controls their layout class', () => {
+    const r = setup();
+    for (const selector of ['input', 'select']) {
+      const element = r.container.querySelector(selector);
+      expect(element?.classList.contains(Style.searchInput)).toBe(true);
+    }
+    r.unmount();
+  });
+
   it('lists articles sorted by path with article urls', () => {
     const r = setup();
     const hrefs = Array.from(r.container.querySelectorAll('a')).map((a) =>

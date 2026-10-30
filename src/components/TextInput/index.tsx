@@ -5,6 +5,7 @@ type Props = {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  className?: string;
 };
 
 type State = Record<string, never>;
@@ -18,7 +19,9 @@ class TextInput extends React.Component<Props, State> {
     return (
       <input
         type="text"
-        className={[Styles.textInput, 'flex'].join(' ')}
+        className={[Styles.textInput, this.props.className]
+          .filter(Boolean)
+          .join(' ')}
         placeholder={this.props.placeholder}
         value={this.props.value}
         onChange={this.props.onChange}
