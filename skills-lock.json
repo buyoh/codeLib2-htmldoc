@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "skills": {
+    "mais-design-js-ts": {
+      "source": "../../../../prompts",
+      "sourceType": "local",
+      "computedHash": "42397c229f656a50c7fd8a767529c6b94337bd8bad5fa8ff8a500d4d12e1259d"
+    },
+    "mais-package-directory-separation": {
+      "source": "../../../../prompts",
+      "sourceType": "local",
+      "computedHash": "4ce6d097e71ec63413aaaf0a124e9fdfa3966ff676a6a279834a01fcfdbbfd3b"
+    },
+    "mais-react-scss-style": {
+      "source": "../../../../prompts",
+      "sourceType": "local",
+      "computedHash": "c871e7958331fd8b25e599f208b7ef3a44a8a4b96397ba6b9f0d3154ae728452"
+    }
+  }
+}
