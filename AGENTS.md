@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is **codeLib2-htmldoc**, a React-based documentation browser for a code library. It displays programming snippets with metadata, search functionality, and article-style viewing. The app loads data from `/public/data/codelib_full.json` and serves articles at routes like `/path/to/article.html`.
+This is **codeLib2-htmldoc**, a React-based documentation browser for a code library. It displays programming snippets with metadata, search functionality, and article-style viewing. The app loads an index (`data/index.json`) on page load and the JSON of one article (`data/articles/<path>.json`) on an article page, and serves articles at routes like `/path/to/article.html`. Both are split from `public/data/codelib_full.json` by `tools/codelib-data.mjs`.
 
 ## Development Commands
 
@@ -21,26 +21,29 @@ This is **codeLib2-htmldoc**, a React-based documentation browser for a code lib
 ## Architecture
 
 ### Container/Component Pattern
-- **`/src/containers`**: Smart components connected to Redux (SideSearchFrame, TopContentFrame, FetchCodeLib)
+- **`/src/containers`**: Smart components connected to Redux (SideSearchFrame, TopContentFrame, FetchCodeLib, FetchArticle, ArticleRoute)
 - **`/src/components`**: Dumb UI components (Badge, Header, CodeLibArticleViewer, etc.)
 - **`/src/stores`**: Redux store with separate modules for `codelib` and `searchbox` state
 
 ### Key Libraries
 - **State Management**: Redux with React-Redux
-- **Type Safety**: io-ts for runtime type validation of data from `codelib_full.json`
+- **Type Safety**: io-ts for runtime type validation of the index and article JSON
 - **Functional Programming**: fp-ts library integration
 - **Styling**: SCSS with CSS Modules (generates `.scss.d.ts` type definitions)
 
 ### Data Flow
-1. `FetchCodeLib` container loads data from `/public/data/codelib_full.json`
-2. Data is validated using io-ts decoders in `/src/lib/CodeLib.ts`
-3. State is managed in Redux store modules
-4. Components render articles with syntax highlighting and metadata
+1. `gather` (codeLib2-tools) writes `public/data/codelib_full.json`. It is only an input and is not published
+2. `tools/codelib-data.mjs` splits it into `data/index.json` and `data/articles/<path>.json` (`pnpm split-data` / `pnpm dev` for the dev server, `tools/generate-release-directory.mjs` for the release)
+3. `FetchCodeLib` loads the index on page load. Search and the side list use only the index (`state.codeLib.items`)
+4. `FetchArticle` loads the JSON of the article in the URL, only when the index contains its path (`state.codeLib.articles[path]`)
+5. Data is validated using io-ts decoders in `/src/lib/CodeLib/` (`types.ts`, `parse.ts`)
+6. `ArticleRoute` renders the article, not found or the top page. While an article is loading, it keeps the previous view (no spinner)
 
 ### Critical Files
-- **`/src/lib/CodeLib.ts`**: Core data fetching and type validation
-- **`/src/lib/Config.ts`**: Application configuration
-- **`/src/stores/codelib.ts`**: Main state management for code library data
+- **`/src/lib/CodeLib/`**: Data fetching (`fetch.ts`), type validation (`types.ts`, `parse.ts`), URLs (`url.ts`) and search (`filter.ts`)
+- **`/src/lib/Config/`**: Application configuration
+- **`/src/stores/codelib/`**: Main state management for code library data
+- **`/tools/codelib-data.mjs`**: Splitting and validating the data (shared by the dev and release tools)
 - **`/src/components/CodeLibArticleViewer`**: Primary article display component
 
 ## Styling System
@@ -49,7 +52,9 @@ Uses CSS Modules with SCSS (`*.module.scss`). TypeScript definitions (`*.module.
 
 ## Data Structure
 
-Articles in `codelib_full.json` contain:
+`data/index.json` is an array of summaries with only `title`, `path`, `lang`, `words` and `tested_by` (`codeLibArticleSummary`; keep it in sync with `INDEX_FIELDS` in `tools/codelib-data.mjs`).
+
+Each `data/articles/<path>.json` is one element of `codelib_full.json` as is (`codeLibArticle`), which contains:
 - Core content: title, overview, sourceCode, language
 - Metadata: filePath, requirements, keywords, references
 - Verification: isVerified, testResult, gitLog

@@ -28,20 +28,30 @@ const codeLibCommit = t.type({
   message: t.string,
 });
 
-export const codeLibArticle = t.type({
+// インデックス（data/index.json）の要素。検索と一覧が使うフィールドのみ。
+// tools/codelib-data.mjs の INDEX_FIELDS と揃える
+const articleSummaryProps = {
   title: t.string,
-  overview: t.string,
-  code: t.string,
   path: articlePath,
   lang: t.string,
+  words: t.union([t.undefined, t.array(t.string)]),
+  tested_by: t.array(t.string),
+};
+
+export const codeLibArticleSummary = t.type(articleSummaryProps);
+
+// 記事ごとの JSON（data/articles/<path>.json）。インデックスのフィールドを含む
+export const codeLibArticle = t.type({
+  ...articleSummaryProps,
+  overview: t.string,
+  code: t.string,
   require: t.union([t.undefined, t.string]),
   references: t.union([t.undefined, t.array(t.string)]),
-  words: t.union([t.undefined, t.array(t.string)]),
   verified: t.union([t.undefined, t.array(t.string)]),
   commits: t.array(codeLibCommit),
-  tested_by: t.array(t.string),
 });
 
 export type ArticlePath = t.TypeOf<typeof articlePath>;
+export type CodeLibArticleSummary = t.TypeOf<typeof codeLibArticleSummary>;
 export type CodeLibArticle = t.TypeOf<typeof codeLibArticle>;
 export type CodeLibCommit = t.TypeOf<typeof codeLibCommit>;

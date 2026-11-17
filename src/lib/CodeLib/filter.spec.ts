@@ -1,5 +1,7 @@
+import { isRight } from 'fp-ts/lib/Either';
 import { describe, expect, it } from 'vitest';
 import { filterCodeLibArticles } from './filter';
+import { codeLibArticleSummary, CodeLibArticleSummary } from './types';
 import { makeArticle } from '../../test/fixtures';
 
 const items = [
@@ -27,6 +29,26 @@ describe('filterCodeLibArticles', () => {
     const withParen = makeArticle({ path: '/x', title: 'f(' });
     expect(filterCodeLibArticles([...items, withParen], 'f(', '')).toEqual([
       withParen,
+    ]);
+  });
+});
+
+describe('filterCodeLibArticles with summaries', () => {
+  // インデックスと同じく、summary のフィールドのみを持つ要素
+  function summary(raw: Record<string, unknown>): CodeLibArticleSummary {
+    const d = codeLibArticleSummary.decode({ tested_by: [], ...raw });
+    if (!isRight(d)) throw Error('invalid test fixture');
+    return d.right;
+  }
+
+  it('searches summary-only items', () => {
+    const summaries = [
+      summary({ title: 'A', path: '/cpp/a', lang: 'cpp', words: ['w'] }),
+      summary({ title: 'B', path: '/ruby/b', lang: 'ruby' }),
+    ];
+    expect(filterCodeLibArticles(summaries, 'w', '')).toEqual([summaries[0]]);
+    expect(filterCodeLibArticles(summaries, 'b', 'ruby')).toEqual([
+      summaries[1],
     ]);
   });
 });

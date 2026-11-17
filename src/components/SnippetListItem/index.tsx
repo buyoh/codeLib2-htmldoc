@@ -1,11 +1,11 @@
 import React from 'react';
 import Styles from './style.module.scss';
 import { Link } from 'react-router';
-import { CodeLibArticle } from '../../lib/CodeLib/types';
+import { CodeLibArticleSummary } from '../../lib/CodeLib/types';
 import Badge from '../Badge';
 
 type Props = {
-  article: CodeLibArticle;
+  article: CodeLibArticleSummary;
   linkto: string;
 };
 

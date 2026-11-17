@@ -1,5 +1,6 @@
-import { fetchAll } from './fetch';
+import { fetchArticle, fetchIndex } from './fetch';
 
 export default {
-  fetchAll: fetchAll,
+  fetchIndex: fetchIndex,
+  fetchArticle: fetchArticle,
 };

@@ -37,7 +37,7 @@ describe('FetchCodeLib', () => {
 
   it('dispatches started and succeeded', async () => {
     const items = [makeArticle()];
-    vi.spyOn(CodeLib, 'fetchAll').mockResolvedValue(items);
+    vi.spyOn(CodeLib, 'fetchIndex').mockResolvedValue(items);
     const props = makeProps();
     const r = render(<FetchCodeLib {...props} />);
     expect(props.onFetchStarted).toHaveBeenCalledTimes(1);
@@ -49,7 +49,7 @@ describe('FetchCodeLib', () => {
 
   it('dispatches failed with the error message instead of throwing', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    vi.spyOn(CodeLib, 'fetchAll').mockRejectedValue(Error('boom'));
+    vi.spyOn(CodeLib, 'fetchIndex').mockRejectedValue(Error('boom'));
     const props = makeProps();
     const r = render(<FetchCodeLib {...props} />);
     await flush();
@@ -60,7 +60,7 @@ describe('FetchCodeLib', () => {
 
   it('ignores the result after unmount', async () => {
     const d = deferred<ReturnType<typeof makeArticle>[]>();
-    vi.spyOn(CodeLib, 'fetchAll').mockReturnValue(d.promise);
+    vi.spyOn(CodeLib, 'fetchIndex').mockReturnValue(d.promise);
     const props = makeProps();
     const r = render(<FetchCodeLib {...props} />);
     r.unmount();
@@ -71,7 +71,7 @@ describe('FetchCodeLib', () => {
 
   it('ignores a failure after unmount', async () => {
     const d = deferred<ReturnType<typeof makeArticle>[]>();
-    vi.spyOn(CodeLib, 'fetchAll').mockReturnValue(d.promise);
+    vi.spyOn(CodeLib, 'fetchIndex').mockReturnValue(d.promise);
     const props = makeProps();
     const r = render(<FetchCodeLib {...props} />);
     r.unmount();
@@ -83,7 +83,7 @@ describe('FetchCodeLib', () => {
   it('uses only the latest request under StrictMode double mount', async () => {
     const first = deferred<ReturnType<typeof makeArticle>[]>();
     const second = deferred<ReturnType<typeof makeArticle>[]>();
-    vi.spyOn(CodeLib, 'fetchAll')
+    vi.spyOn(CodeLib, 'fetchIndex')
       .mockReturnValueOnce(first.promise)
       .mockReturnValueOnce(second.promise);
     const props = makeProps();

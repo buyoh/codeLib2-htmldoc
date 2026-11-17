@@ -9,21 +9,45 @@ import { createRootStore } from '../stores';
 import { render } from '../test/render';
 import { rawArticle } from '../test/fixtures';
 
-const articles = [rawArticle({ path: '/cpp/sample', title: 'Sample Title' })];
+const sample = rawArticle({ path: '/cpp/sample', title: 'Sample Title' });
+const articles = [sample];
 
-// fetch を保留し、応答前の画面を確認できるようにする
+const INDEX_URL = '/codeLib2/data/index.json';
+const SAMPLE_URL = '/codeLib2/data/articles/cpp/sample.json';
+
+// fetch を URL ごとに保留し、応答前の画面を確認できるようにする。
+// 戻り値の関数で、指定した URL に応答する
 function stubFetch() {
-  let respond: (response: Response | Error) => void = () => undefined;
-  const pending = new Promise<Response>((resolve, reject) => {
-    respond = (r) => (r instanceof Error ? reject(r) : resolve(r));
-  });
-  vi.stubGlobal('fetch', vi.fn().mockReturnValue(pending));
-  return (r: Response | Error) =>
+  const pendings = new Map<
+    string,
+    { promise: Promise<Response>; settle: (r: Response | Error) => void }
+  >();
+  const pendingOf = (url: string) => {
+    let p = pendings.get(url);
+    if (p === undefined) {
+      let settle: (r: Response | Error) => void = () => undefined;
+      const promise = new Promise<Response>((resolve, reject) => {
+        settle = (r) => (r instanceof Error ? reject(r) : resolve(r));
+      });
+      p = { promise, settle };
+      pendings.set(url, p);
+    }
+    return p;
+  };
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((url: string) => pendingOf(url).promise)
+  );
+  return (url: string, r: Response | Error) =>
     React.act(async () => {
-      respond(r);
-      await pending.catch(() => undefined);
+      const p = pendingOf(url);
+      p.settle(r);
+      await p.promise.catch(() => undefined);
     });
 }
+
+const fetchedUrls = () =>
+  vi.mocked(fetch).mock.calls.map(([url]) => String(url));
 
 function renderAt(pathname: string) {
   return render(
@@ -52,8 +76,12 @@ describe('Index', () => {
     const respond = stubFetch();
     const r = renderAt('/cpp/sample.html');
     expect(mainFrame(r.container).textContent).toBe('');
-    await respond(Response.json(articles));
+    await respond(INDEX_URL, Response.json(articles));
+    // インデックスのみでは本文を表示しない
+    expect(mainFrame(r.container).textContent).toBe('');
+    await respond(SAMPLE_URL, Response.json(sample));
     expect(main(r.container)?.textContent).toBe('Sample Title');
+    expect(fetchedUrls()).toEqual([INDEX_URL, SAMPLE_URL]);
     r.unmount();
   });
 
@@ -61,8 +89,20 @@ describe('Index', () => {
     const respond = stubFetch();
     const r = renderAt('/cpp/unknown.html');
     expect(mainFrame(r.container).textContent).toBe('');
-    await respond(Response.json(articles));
+    await respond(INDEX_URL, Response.json(articles));
     expect(main(r.container)?.textContent).toBe('ページが見つかりません');
+    expect(fetchedUrls()).toEqual([INDEX_URL]);
+    r.unmount();
+  });
+
+  it('notifies an article fetch failure in the article area', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const respond = stubFetch();
+    const r = renderAt('/cpp/sample.html');
+    await respond(INDEX_URL, Response.json(articles));
+    await respond(SAMPLE_URL, new Response('', { status: 404 }));
+    expect(alertOf(r.container)?.textContent).toContain('404');
+    expect(main(r.container)).toBeNull();
     r.unmount();
   });
 
@@ -70,7 +110,7 @@ describe('Index', () => {
     const respond = stubFetch();
     const r = renderAt('/');
     expect(main(r.container)?.textContent).toBe('doc-codeLib2');
-    await respond(Response.json(articles));
+    await respond(INDEX_URL, Response.json(articles));
     expect(main(r.container)?.textContent).toBe('doc-codeLib2');
     expect(r.container.textContent).toContain('Sample Title');
     r.unmount();
@@ -82,7 +122,7 @@ describe('Index', () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined);
       const respond = stubFetch();
       const r = renderAt(pathname);
-      await respond(new Error('boom'));
+      await respond(INDEX_URL, new Error('boom'));
       expect(alertOf(r.container)?.textContent).toContain('boom');
       expect(main(r.container)).toBeNull();
       r.unmount();
@@ -93,7 +133,7 @@ describe('Index', () => {
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
     const respond = stubFetch();
     const r = renderAt('/');
-    await respond(new Response('', { status: 500 }));
+    await respond(INDEX_URL, new Response('', { status: 500 }));
     expect(alertOf(r.container)?.textContent).toContain('500');
     expect(main(r.container)?.textContent).toBe('doc-codeLib2');
     r.unmount();
@@ -102,7 +142,8 @@ describe('Index', () => {
   it('uses no global utility class or inline style', async () => {
     const respond = stubFetch();
     const r = renderAt('/cpp/sample.html');
-    await respond(Response.json(articles));
+    await respond(INDEX_URL, Response.json(articles));
+    await respond(SAMPLE_URL, Response.json(sample));
     expect(main(r.container)?.textContent).toBe('Sample Title');
     expect(
       r.container.querySelector(
@@ -116,10 +157,10 @@ describe('Index', () => {
     r.unmount();
   });
 
-  it('opens an article from the side list without reloading the data', async () => {
+  it('opens an article from the side list, loading only its data', async () => {
     const respond = stubFetch();
     const r = renderAt('/');
-    await respond(Response.json(articles));
+    await respond(INDEX_URL, Response.json(articles));
     const link = [...r.container.querySelectorAll('a')].find(
       (a) => a.textContent === 'Sample Title'
     );
@@ -129,8 +170,11 @@ describe('Index', () => {
         new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 })
       );
     });
+    // 記事の応答までは前の表示のまま
+    expect(main(r.container)?.textContent).toBe('doc-codeLib2');
+    await respond(SAMPLE_URL, Response.json(sample));
     expect(main(r.container)?.textContent).toBe('Sample Title');
-    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetchedUrls()).toEqual([INDEX_URL, SAMPLE_URL]);
     r.unmount();
   });
 });

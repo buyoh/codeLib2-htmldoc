@@ -61,7 +61,6 @@ describe('generate-release-directory.mjs', () => {
     ]);
     expect(fs.readdirSync(path.join(outputPath, 'data')).sort()).toEqual([
       'articles',
-      'codelib_full.json',
       'index.json',
     ]);
     const link = path.join(outputPath, 'src/cpp/a.hpp.html');
@@ -159,7 +158,7 @@ describe('generate-release-directory.mjs', () => {
     expect(fs.existsSync(path.join(root, 'pwn.html'))).toBe(false);
   });
 
-  // 'data/codelib_full.json' を置かないこと。出力先の検査が壊れても消去に進まないようにしている
+  // 'data/index.json' を置かないこと。出力先の検査が壊れても消去に進まないようにしている
   function runIn(cwd, output) {
     return runScript(['--public-path', publicPath, '--output-path', output], {
       cwd,
@@ -285,5 +284,34 @@ describe('generate-release-directory.mjs', () => {
     fs.writeFileSync(path.join(publicPath, '.gitignore'), '*\n');
     expect(run([{ path: '/a' }]).status).toBe(0);
     expect(fs.existsSync(path.join(outputPath, '.gitignore'))).toBe(false);
+  });
+});
+
+describe('generate-release-directory.mjs previous output', () => {
+  it('refuses an output of the old format that has no data/index.json', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'release-dir-'));
+    try {
+      const publicPath = path.join(root, 'public');
+      const outputPath = path.join(root, 'output');
+      fs.mkdirSync(path.join(publicPath, 'data'), { recursive: true });
+      fs.writeFileSync(path.join(publicPath, 'index.html'), 'index');
+      fs.writeFileSync(path.join(publicPath, 'data/codelib_full.json'), '[]');
+      fs.mkdirSync(path.join(outputPath, 'data'), { recursive: true });
+      fs.writeFileSync(path.join(outputPath, 'index.html'), 'old');
+      fs.writeFileSync(path.join(outputPath, 'data/codelib_full.json'), '[]');
+      const result = runScript([
+        '--public-path',
+        publicPath,
+        '--output-path',
+        outputPath,
+      ]);
+      expect(result.status).toBe(1);
+      expect(result.stderr).toMatch(/previous output/);
+      expect(fs.readFileSync(path.join(outputPath, 'index.html'), 'utf8')).toBe(
+        'old'
+      );
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
   });
 });

@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   articleAbsoluteUrl,
+  articleDataPath,
   articlePathFromUrl,
   articleUrl,
+  INDEX_DATA_PATH,
   isExternalUrl,
 } from './url';
 
@@ -80,5 +82,21 @@ describe('articleAbsoluteUrl', () => {
     expect(articleAbsoluteUrl('https://example.com', '/src/a#b')).toBe(
       'https://example.com/codeLib2/src/a%23b.html'
     );
+  });
+});
+
+describe('articleDataPath', () => {
+  it('maps the article path to its JSON under /data/articles', () => {
+    expect(articleDataPath('/src/cpp/a.hpp')).toBe(
+      '/data/articles/src/cpp/a.hpp.json'
+    );
+  });
+
+  it('encodes each segment', () => {
+    expect(articleDataPath('/a b/c?d')).toBe('/data/articles/a%20b/c%3Fd.json');
+  });
+
+  it('places the index under /data', () => {
+    expect(INDEX_DATA_PATH).toBe('/data/index.json');
   });
 });

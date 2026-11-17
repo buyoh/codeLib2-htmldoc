@@ -3,12 +3,13 @@
 //
 // 出力先は毎回空にしてから作り直す。不正な入力は、出力先に触る前にすべて検査して停止する。
 // public/data は分割データの入力と dev の生成物の置き場なので、コピーせずに入力から毎回生成する。
+// 入力の codelib_full.json は公開しない。
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { parseArgs } from 'node:util';
 import {
   DataError,
-  INPUT_FILE,
+  INDEX_FILE,
   buildDataFiles,
   findDestinationConflicts,
   readArticles,
@@ -48,8 +49,7 @@ function lstatOrNull(p) {
 
 function isPreviousOutput(dir) {
   return (
-    isFile(path.join(dir, 'index.html')) &&
-    isFile(path.join(dir, 'data/codelib_full.json'))
+    isFile(path.join(dir, 'index.html')) && isFile(path.join(dir, INDEX_FILE))
   );
 }
 
@@ -154,12 +154,7 @@ fs.cpSync(publicPath, outputPath, {
     src !== path.join(publicPath, 'data'),
 });
 
-// クライアントの切り替えまでは、分割前の入力も公開する
-const outputFiles = new Map(plan.dataFiles).set(
-  INPUT_FILE,
-  fs.readFileSync(path.join(publicPath, INPUT_FILE))
-);
-for (const [rel, content] of outputFiles) {
+for (const [rel, content] of plan.dataFiles) {
   const dest = path.join(outputPath, rel);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.writeFileSync(dest, content);

@@ -7,7 +7,7 @@ import { makeArticle } from '../test/fixtures';
 describe('createRootStore', () => {
   it('starts with the initial state of each slice', () => {
     expect(createRootStore().getState()).toEqual({
-      codeLib: { items: [], status: 'idle' },
+      codeLib: { items: [], status: 'idle', articles: {} },
       searchBox: { keyword: '', lang: '' },
     });
   });
@@ -31,10 +31,15 @@ describe('createRootStore', () => {
       items: [],
       status: 'error',
       error: 'boom',
+      articles: {},
     });
     store.dispatch(CodeLibActions.fetchStarted());
     store.dispatch(CodeLibActions.fetchSucceeded(items));
-    expect(store.getState().codeLib).toEqual({ items, status: 'loaded' });
+    expect(store.getState().codeLib).toEqual({
+      items,
+      status: 'loaded',
+      articles: {},
+    });
   });
 
   it('updates the search box', () => {

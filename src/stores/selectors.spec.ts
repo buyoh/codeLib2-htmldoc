@@ -3,7 +3,7 @@ import { createRootStore, rootReducer, RootState } from '.';
 import * as CodeLibActions from './codelib/actions';
 import * as SearchBoxActions from './searchbox/actions';
 import {
-  selectArticleMap,
+  selectArticlePaths,
   selectFilteredArticles,
   selectLanguages,
 } from './selectors';
@@ -52,11 +52,12 @@ describe('selectFilteredArticles', () => {
   });
 });
 
-describe('selectArticleMap', () => {
-  it('looks up an article by path', () => {
-    const map = selectArticleMap(loadedState());
-    expect(map.get('/cpp/c')).toBe(items[2]);
-    expect(map.get('/cpp/x')).toBeUndefined();
+describe('selectArticlePaths', () => {
+  it('contains the path of each indexed article', () => {
+    const paths = selectArticlePaths(loadedState());
+    expect(paths.has('/cpp/c')).toBe(true);
+    expect(paths.has('/cpp/x')).toBe(false);
+    expect(paths.size).toBe(3);
   });
 });
 

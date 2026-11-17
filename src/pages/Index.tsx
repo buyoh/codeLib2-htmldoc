@@ -4,6 +4,7 @@ import Styles from './style.module.scss';
 import SideSearchFrame from '../containers/SideSearchFrame/';
 import { Routes, Route } from 'react-router';
 import ArticleRoute from '../containers/ArticleRoute';
+import FetchArticle from '../containers/FetchArticle';
 import FetchCodeLib from '../containers/FetchCodeLib';
 import FetchErrorNotice from '../containers/FetchErrorNotice';
 import Header from '../components/Header';
@@ -26,6 +27,7 @@ class Index extends React.Component<Props, State> {
     return (
       <div className={Styles.bodyWrapper}>
         <FetchCodeLib />
+        <FetchArticle />
         <div className={Styles.layoutTopFrame}>
           <Header />
         </div>

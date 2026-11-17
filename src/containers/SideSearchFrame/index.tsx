@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { AppDispatch, RootState } from '../../stores';
-import { CodeLibArticle } from '../../lib/CodeLib/types';
+import { CodeLibArticleSummary } from '../../lib/CodeLib/types';
 import * as SearchBoxActions from '../../stores/searchbox/actions';
 import { selectFilteredArticles } from '../../stores/selectors';
 import { articleUrl } from '../../lib/CodeLib/url';
@@ -21,7 +21,7 @@ type State = Record<string, never>;
 //
 
 type StateProps = {
-  codeLibArticles: Array<CodeLibArticle>;
+  codeLibArticles: Array<CodeLibArticleSummary>;
   languageOptions: Array<LanguageOption>;
   searchBoxKeyword: string;
   searchBoxLang: string;

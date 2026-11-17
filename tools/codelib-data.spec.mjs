@@ -2,7 +2,13 @@ import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import {
+  parseCodeLibArticle,
+  parseCodeLibIndex,
+} from '../src/lib/CodeLib/parse';
 import { isValidArticlePath as isValidArticlePathTs } from '../src/lib/CodeLib/types';
+import { articleDataPath, INDEX_DATA_PATH } from '../src/lib/CodeLib/url';
+import { rawArticle } from '../src/test/fixtures';
 import {
   DataError,
   INDEX_FILE,
@@ -169,5 +175,32 @@ describe('readArticles', () => {
     const e = errorOf(() => readArticles(publicPath));
     expect(e).toBeInstanceOf(DataError);
     expect(e.code).toBe('ENOENT');
+  });
+});
+
+describe('buildDataFiles agrees with the client', () => {
+  it('places the files where the client fetches them', () => {
+    const files = buildDataFiles([{ path: '/a/b.hpp' }]);
+    expect(files.has(articleDataPath('/a/b.hpp').slice(1))).toBe(true);
+    expect(files.has(INDEX_DATA_PATH.slice(1))).toBe(true);
+  });
+
+  it('produces files that the client decoders accept', () => {
+    const articles = [
+      rawArticle({ path: '/a', words: ['w'], tested_by: ['t'] }),
+      rawArticle({ path: '/b/c.hpp' }),
+    ];
+    const files = buildDataFiles(articles);
+    const index = parseCodeLibIndex(JSON.parse(files.get(INDEX_FILE)));
+    expect(index.invalids).toEqual([]);
+    expect(index.ok && index.articles.map((a) => a.path)).toEqual([
+      '/a',
+      '/b/c.hpp',
+    ]);
+    for (const a of articles) {
+      const json = JSON.parse(files.get(articleDataPath(a.path).slice(1)));
+      const article = parseCodeLibArticle(json);
+      expect(article.ok && article.article.path).toBe(a.path);
+    }
   });
 });

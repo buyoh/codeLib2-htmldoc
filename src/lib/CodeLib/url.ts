@@ -10,10 +10,21 @@ function decodeSegment(segment: string): string {
   }
 }
 
-// 記事の path から、ルータ上の URL を生成する。
 // '%' '#' '?' 等が pathname 以外として解釈されないよう、セグメント単位でエンコードする
+function encodePath(path: string): string {
+  return path.split('/').map(encodeURIComponent).join('/');
+}
+
+// 記事の path から、ルータ上の URL を生成する
 export function articleUrl(path: string): string {
-  return path.split('/').map(encodeURIComponent).join('/') + ARTICLE_URL_SUFFIX;
+  return encodePath(path) + ARTICLE_URL_SUFFIX;
+}
+
+// data ファイルの rootDirectory からの相対パス。配置は tools/codelib-data.mjs と揃える
+export const INDEX_DATA_PATH = '/data/index.json';
+
+export function articleDataPath(path: string): string {
+  return `/data/articles${encodePath(path)}.json`;
 }
 
 // ルータ上の URL (pathname) から記事の path を取り出す。記事 URL でなければ null

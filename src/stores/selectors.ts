@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '.';
-import { CodeLibArticle } from '../lib/CodeLib/types';
+import { CodeLibArticleSummary } from '../lib/CodeLib/types';
 import { filterCodeLibArticles } from '../lib/CodeLib/filter';
 
 const selectItems = (state: RootState) => state.codeLib.items;
@@ -10,17 +10,16 @@ const selectLang = (state: RootState) => state.searchBox.lang;
 // 検索条件で絞り込み、path 順に並べた記事一覧
 export const selectFilteredArticles = createSelector(
   [selectItems, selectKeyword, selectLang],
-  (items, keyword, lang): Array<CodeLibArticle> =>
+  (items, keyword, lang): Array<CodeLibArticleSummary> =>
     filterCodeLibArticles(items, keyword, lang).sort((l, r) =>
       l.path.localeCompare(r.path)
     )
 );
 
-// path から記事を引くための Map
-export const selectArticleMap = createSelector(
+// インデックスに存在する記事の path
+export const selectArticlePaths = createSelector(
   [selectItems],
-  (items): ReadonlyMap<string, CodeLibArticle> =>
-    new Map(items.map((a) => [a.path, a]))
+  (items): ReadonlySet<string> => new Set(items.map((a) => a.path))
 );
 
 // 記事データに含まれる言語の一覧（重複なし・昇順）

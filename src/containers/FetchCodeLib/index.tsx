@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { AppDispatch, RootState } from '../../stores';
-import { CodeLibArticle } from '../../lib/CodeLib/types';
+import { CodeLibArticleSummary } from '../../lib/CodeLib/types';
 import * as CodeLibActions from '../../stores/codelib/actions';
 import CodeLib from '../../lib/CodeLib';
 
@@ -15,7 +15,7 @@ type State = Record<string, never>;
 
 type DispatchProps = {
   onFetchStarted: () => void;
-  onFetchSucceeded: (items: Array<CodeLibArticle>) => void;
+  onFetchSucceeded: (items: Array<CodeLibArticleSummary>) => void;
   onFetchFailed: (error: string) => void;
 };
 
@@ -26,7 +26,7 @@ type CombinedProps = Props & DispatchProps;
 function mapDispatchToProps(dispatch: AppDispatch): DispatchProps {
   return {
     onFetchStarted: () => dispatch(CodeLibActions.fetchStarted()),
-    onFetchSucceeded: (items: Array<CodeLibArticle>) =>
+    onFetchSucceeded: (items: Array<CodeLibArticleSummary>) =>
       dispatch(CodeLibActions.fetchSucceeded(items)),
     onFetchFailed: (error: string) =>
       dispatch(CodeLibActions.fetchFailed(error)),
@@ -56,7 +56,7 @@ export class FetchCodeLib extends React.Component<CombinedProps, State> {
     const requestId = ++this.requestId;
     this.props.onFetchStarted();
     try {
-      const items = await CodeLib.fetchAll();
+      const items = await CodeLib.fetchIndex();
       if (requestId !== this.requestId) return;
       this.props.onFetchSucceeded(items);
     } catch (e) {

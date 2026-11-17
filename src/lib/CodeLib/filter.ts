@@ -1,10 +1,10 @@
-import { CodeLibArticle } from './types';
+import { CodeLibArticleSummary } from './types';
 
-function testArticleByLang(a: CodeLibArticle, lang: string) {
+function testArticleByLang(a: CodeLibArticleSummary, lang: string) {
   return !lang || a.lang === lang;
 }
 
-function testArticleByKeyRe(a: CodeLibArticle, re: RegExp) {
+function testArticleByKeyRe(a: CodeLibArticleSummary, re: RegExp) {
   return (
     re.test(a.path) ||
     a.words?.some((word) => re.test(word)) ||
@@ -12,7 +12,7 @@ function testArticleByKeyRe(a: CodeLibArticle, re: RegExp) {
   );
 }
 
-function testArticleByKeyStr(a: CodeLibArticle, key: string) {
+function testArticleByKeyStr(a: CodeLibArticleSummary, key: string) {
   return (
     a.path.includes(key) ||
     a.words?.some((word) => word.includes(key)) ||
@@ -21,10 +21,10 @@ function testArticleByKeyStr(a: CodeLibArticle, key: string) {
 }
 
 export function filterCodeLibArticles(
-  items: ReadonlyArray<CodeLibArticle>,
+  items: ReadonlyArray<CodeLibArticleSummary>,
   keyword: string,
   lang: string
-): Array<CodeLibArticle> {
+): Array<CodeLibArticleSummary> {
   if (!keyword)
     return items.filter((article) => testArticleByLang(article, lang));
   let reg: RegExp | null = null;

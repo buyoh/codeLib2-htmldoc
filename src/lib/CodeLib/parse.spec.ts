@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { parseCodeLibArticles } from './parse';
+import { parseCodeLibArticle, parseCodeLibIndex } from './parse';
 import { rawArticle } from '../../test/fixtures';
 
-describe('parseCodeLibArticles', () => {
+describe('parseCodeLibIndex', () => {
   it('returns all articles when every element is valid', () => {
     const json = [rawArticle({ path: '/a' }), rawArticle({ path: '/b' })];
-    const result = parseCodeLibArticles(json);
+    const result = parseCodeLibIndex(json);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.articles.map((a) => a.path)).toEqual(['/a', '/b']);
@@ -13,12 +13,12 @@ describe('parseCodeLibArticles', () => {
   });
 
   it('accepts an empty array', () => {
-    const result = parseCodeLibArticles([]);
+    const result = parseCodeLibIndex([]);
     expect(result).toEqual({ ok: true, articles: [], invalids: [] });
   });
 
   it('fails when the data is not an array', () => {
-    const result = parseCodeLibArticles({ items: [] });
+    const result = parseCodeLibIndex({ items: [] });
     expect(result.ok).toBe(false);
   });
 
@@ -28,7 +28,7 @@ describe('parseCodeLibArticles', () => {
       rawArticle({ title: 1 }),
       rawArticle({ path: '/c' }),
     ];
-    const result = parseCodeLibArticles(json);
+    const result = parseCodeLibIndex(json);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.articles.map((a) => a.path)).toEqual(['/a', '/c']);
@@ -39,7 +39,7 @@ describe('parseCodeLibArticles', () => {
 
   it('rejects a path that does not start with "/"', () => {
     const json = [rawArticle({ path: '/a' }), rawArticle({ path: 'relative' })];
-    const result = parseCodeLibArticles(json);
+    const result = parseCodeLibIndex(json);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.articles.map((a) => a.path)).toEqual(['/a']);
@@ -47,9 +47,7 @@ describe('parseCodeLibArticles', () => {
   });
 
   it('accepts a path made of safe segments', () => {
-    const result = parseCodeLibArticles([
-      rawArticle({ path: '/cpp/a.b/c_d-e' }),
-    ]);
+    const result = parseCodeLibIndex([rawArticle({ path: '/cpp/a.b/c_d-e' })]);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.invalids).toEqual([]);
@@ -69,34 +67,64 @@ describe('parseCodeLibArticles', () => {
     '/a\\b',
   ])('rejects a path that could escape the root: %s', (path) => {
     const json = [rawArticle({ path: '/a' }), rawArticle({ path })];
-    const result = parseCodeLibArticles(json);
+    const result = parseCodeLibIndex(json);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.invalids.map((i) => i.index)).toEqual([1]);
   });
 
   it('keeps optional fields as decoded values', () => {
-    const json = [
-      rawArticle({ words: ['w'], references: ['https://example.com'] }),
-    ];
-    const result = parseCodeLibArticles(json);
+    const json = [rawArticle({ words: ['w'] })];
+    const result = parseCodeLibIndex(json);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.articles[0].words).toEqual(['w']);
-    expect(result.articles[0].references).toEqual(['https://example.com']);
+  });
+
+  it('accepts summary-only elements', () => {
+    const json = [
+      { title: 't', path: '/a', lang: 'cpp', tested_by: [] },
+      { title: 't', path: '/b', lang: 'cpp', words: ['w'], tested_by: ['x'] },
+    ];
+    const result = parseCodeLibIndex(json);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.invalids).toEqual([]);
   });
 
   it('accepts exactly half of the elements being invalid', () => {
     const json = [rawArticle({ path: '/a' }), rawArticle({ path: 'x' })];
-    expect(parseCodeLibArticles(json).ok).toBe(true);
+    expect(parseCodeLibIndex(json).ok).toBe(true);
   });
 
   it('fails when more than half of the elements are invalid', () => {
-    const json = [rawArticle({ path: '/a' }), null, rawArticle({ code: 0 })];
-    const result = parseCodeLibArticles(json);
+    const json = [rawArticle({ path: '/a' }), null, rawArticle({ lang: 0 })];
+    const result = parseCodeLibIndex(json);
     expect(result.ok).toBe(false);
     if (result.ok) return;
     expect(result.error).toContain('2/3');
     expect(result.invalids.map((i) => i.index)).toEqual([1, 2]);
+  });
+});
+
+describe('parseCodeLibArticle', () => {
+  it('returns the article', () => {
+    const result = parseCodeLibArticle(rawArticle({ path: '/a', code: 'x' }));
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.article.path).toBe('/a');
+    expect(result.article.code).toBe('x');
+  });
+
+  it.each([
+    ['a missing body field', rawArticle({ code: undefined })],
+    ['an invalid path', rawArticle({ path: 'relative' })],
+    ['a non-object', [rawArticle()]],
+    ['null', null],
+  ])('fails on %s', (_, json) => {
+    const result = parseCodeLibArticle(json);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.error).not.toBe('');
   });
 });
