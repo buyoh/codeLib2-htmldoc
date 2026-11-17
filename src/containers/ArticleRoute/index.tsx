@@ -46,7 +46,11 @@ function ArticleRoute(): JSX.Element {
   const [settled, setSettled] = useState({ pathname, view });
   if (view.kind !== 'pending' && view !== settled.view)
     setSettled({ pathname, view });
-  const shown = view.kind === 'pending' ? settled : { pathname, view };
+  // 失敗した記事を再取得している間は、その記事の古い失敗通知を残さない
+  const keepSettled =
+    view.kind === 'pending' &&
+    !(settled.view.kind === 'articleError' && settled.pathname === pathname);
+  const shown = keepSettled ? settled : { pathname, view };
   return (
     // 遷移時にエラー状態をリセットするため、表示中の pathname を key にする。
     // pathname のままでは、読み込み中に残している記事が remount される

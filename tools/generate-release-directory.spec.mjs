@@ -285,6 +285,14 @@ describe('generate-release-directory.mjs', () => {
     expect(run([{ path: '/a' }]).status).toBe(0);
     expect(fs.existsSync(path.join(outputPath, '.gitignore'))).toBe(false);
   });
+
+  it('removes a nested .gitignore from the output', () => {
+    fs.mkdirSync(path.join(publicPath, 'sub'));
+    fs.writeFileSync(path.join(publicPath, 'sub/.gitignore'), '*\n');
+    fs.writeFileSync(path.join(publicPath, 'sub/kept'), '');
+    expect(run([{ path: '/a' }]).status).toBe(0);
+    expect(fs.readdirSync(path.join(outputPath, 'sub'))).toEqual(['kept']);
+  });
 });
 
 describe('generate-release-directory.mjs previous output', () => {

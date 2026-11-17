@@ -220,4 +220,29 @@ describe('FetchArticle', () => {
     });
     r.unmount();
   });
+
+  it('does not keep the old failure while refetching after an unsettled visit', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const retry = deferred<CodeLibArticle>();
+    const pendingOther = deferred<CodeLibArticle>();
+    vi.spyOn(CodeLib, 'fetchArticle')
+      .mockRejectedValueOnce(Error('boom'))
+      .mockReturnValueOnce(pendingOther.promise)
+      .mockReturnValueOnce(retry.promise);
+    const r = renderAt('/cpp/sample.html');
+    await flush();
+    expect(alertOf(r.container)?.textContent).toContain('boom');
+
+    // 取得中の記事へ移ると、確定するまで失敗通知が残る（直前の表示の維持）
+    navigateTo('/cpp/other.html');
+    expect(alertOf(r.container)?.textContent).toContain('boom');
+    // その記事の確定前に戻ると、再取得中は古い失敗通知を出さない
+    navigateTo('/cpp/sample.html');
+    expect(alertOf(r.container)).toBeNull();
+
+    retry.resolve(sample);
+    await flush();
+    expect(h1(r.container)).toBe('Sample Title');
+    r.unmount();
+  });
 });

@@ -219,6 +219,32 @@ describe('ArticleRoute', () => {
     }
   });
 
+  it('keeps a render error until the next article loads, then recovers', () => {
+    const restoreLogs = suppressRenderErrorLogs();
+    try {
+      const broken = {
+        ...article,
+        commits: undefined,
+      } as unknown as typeof article;
+      const store = loadedStore(broken);
+      const r = renderAt('/cpp/sample.html', store);
+      expect(r.container.querySelector('h1')?.textContent).toBe(
+        '表示に失敗しました'
+      );
+      navigateTo('/cpp/other.html');
+      expect(r.container.querySelector('h1')?.textContent).toBe(
+        '表示に失敗しました'
+      );
+      React.act(() => {
+        store.dispatch(CodeLibActions.articleFetchSucceeded(other));
+      });
+      expect(r.container.querySelector('h1')?.textContent).toBe('Other Title');
+      r.unmount();
+    } finally {
+      restoreLogs();
+    }
+  });
+
   it('resolves articles and links under the production basename', () => {
     const store = loadedStore(article);
     const tree = (pathname: string) => (
