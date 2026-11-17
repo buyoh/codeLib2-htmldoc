@@ -32,5 +32,5 @@ check http://localhost:8020/codeLib2
 
 ```
 pnpm build
-ruby tools/generate_release_directory.rb --output-path /tmp/www/codeLib2
+node tools/generate-release-directory.mjs --output-path /tmp/www/codeLib2
 ```
