@@ -59,12 +59,39 @@ describe('generate-release-directory.mjs', () => {
       'index.html',
       'src',
     ]);
-    expect(fs.readdirSync(path.join(outputPath, 'data'))).toEqual([
+    expect(fs.readdirSync(path.join(outputPath, 'data')).sort()).toEqual([
+      'articles',
       'codelib_full.json',
+      'index.json',
     ]);
     const link = path.join(outputPath, 'src/cpp/a.hpp.html');
     expect(fs.readlinkSync(link)).toBe('../../index.html');
     expect(fs.readFileSync(link, 'utf8')).toBe('index');
+  });
+
+  it('writes the split data', () => {
+    expect(run([{ path: '/src/a.hpp', title: 'A', code: 'c' }]).status).toBe(0);
+    const read = (rel) =>
+      JSON.parse(fs.readFileSync(path.join(outputPath, rel), 'utf8'));
+    expect(read('data/index.json')).toEqual([
+      { path: '/src/a.hpp', title: 'A' },
+    ]);
+    expect(read('data/articles/src/a.hpp.json')).toEqual({
+      path: '/src/a.hpp',
+      title: 'A',
+      code: 'c',
+    });
+  });
+
+  it('does not publish stale split data left in public/data', () => {
+    fs.mkdirSync(path.join(publicPath, 'data/articles'));
+    fs.writeFileSync(path.join(publicPath, 'data/articles/stale.json'), '{}');
+    fs.writeFileSync(path.join(publicPath, 'data/extra'), '');
+    expect(run([{ path: '/a' }]).status).toBe(0);
+    expect(fs.readdirSync(path.join(outputPath, 'data/articles'))).toEqual([
+      'a.json',
+    ]);
+    expect(fs.existsSync(path.join(outputPath, 'data/extra'))).toBe(false);
   });
 
   it('keeps a relative symlink in public relative', () => {
@@ -122,6 +149,8 @@ describe('generate-release-directory.mjs', () => {
     ['parent is a public file', [{ path: '/index.html/x' }]],
     ['parent is another article', [{ path: '/a' }, { path: '/a.html/b' }]],
     ['parent is a public symlink', [{ path: '/esc/pwn' }]],
+    ['parent is another article data', [{ path: '/a' }, { path: '/a.json/b' }]],
+    ['parent is the index data', [{ path: '/data/index.json/x' }]],
   ])('aborts before touching the output on a conflict: %s', (_, data) => {
     fs.mkdirSync(path.join(publicPath, 'sub.html'));
     preparePreviousOutput();

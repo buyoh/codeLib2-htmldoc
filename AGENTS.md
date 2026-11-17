@@ -8,8 +8,11 @@ This is **codeLib2-htmldoc**, a React-based documentation browser for a code lib
 
 ## Development Commands
 
-- **Start development server**: `pnpm dev` (serves on http://localhost:8020/codeLib2)
+- **Start development server**: `pnpm dev` (serves on http://localhost:8020/codeLib2; splits the data first)
+- **Split the data for the dev server**: `pnpm split-data` (`tools/split-data.mjs`)
 - **Build for production**: `pnpm build`
+- **Generate the release directory**: `node tools/generate-release-directory.mjs --output-path <dir>` (after `pnpm build`)
+- **Validate generated data**: `pnpm validate-data`
 - **Lint code**: `pnpm lint` (runs prettier and eslint)
 - **Fix linting issues**: `pnpm lint-fix`
 - **Run tests**: `pnpm test` (vitest)

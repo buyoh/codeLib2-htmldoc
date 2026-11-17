@@ -6,7 +6,7 @@ interface ArticlePathBrand {
 
 // 記事の path は '/' 始まりの相対パス風の文字列に限る（allowlist）。
 // '//host' のような外部 URL や '.' '..' セグメントによるパストラバーサルを防ぐ。
-// tools/generate-release-directory.mjs でも同じ条件で検証している
+// tools/codelib-data.mjs でも同じ条件で検証している
 const ARTICLE_PATH_PATTERN = /^\/(?:[A-Za-z0-9_.-]+\/)*[A-Za-z0-9_.-]+$/;
 
 export function isValidArticlePath(s: string): boolean {

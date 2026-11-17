@@ -1,13 +1,18 @@
-// public/ をリリース用のディレクトリへコピーし、記事ごとに index.html への symlink を作る。
+// public/ をリリース用のディレクトリへコピーし、記事データの分割と、記事ごとの index.html への symlink を作る。
 // usage: node tools/generate-release-directory.mjs --output-path /var/www/codeLib2 [--public-path public]
 //
 // 出力先は毎回空にしてから作り直す。不正な入力は、出力先に触る前にすべて検査して停止する。
+// public/data は分割データの入力と dev の生成物の置き場なので、コピーせずに入力から毎回生成する。
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { parseArgs } from 'node:util';
-
-// src/lib/CodeLib/types.ts の isValidArticlePath と同じ条件
-const ARTICLE_PATH_PATTERN = /^\/(?:[A-Za-z0-9_.-]+\/)*[A-Za-z0-9_.-]+$/;
+import {
+  DataError,
+  INPUT_FILE,
+  buildDataFiles,
+  findDestinationConflicts,
+  readArticles,
+} from './codelib-data.mjs';
 
 // 出力先にコピーしないファイル
 const EXCLUDED_BASENAMES = new Set(['.gitignore']);
@@ -15,14 +20,6 @@ const EXCLUDED_BASENAMES = new Set(['.gitignore']);
 function fail(message) {
   console.error(message);
   process.exit(1);
-}
-
-function isValidArticlePath(p) {
-  return (
-    typeof p === 'string' &&
-    ARTICLE_PATH_PATTERN.test(p) &&
-    p.split('/').every((seg) => seg !== '.' && seg !== '..')
-  );
 }
 
 // symlink を解決した絶対パス。末尾側は存在しなくてもよい
@@ -56,32 +53,38 @@ function isPreviousOutput(dir) {
   );
 }
 
-// 作成先や親ディレクトリが public のファイル・symlink や他の記事の作成先と衝突するか
-function conflicts(rel, linkPaths, publicPath) {
+// 作成先や親ディレクトリが public のファイル・symlink と衝突するか。
+// 作成先どうしの衝突は findDestinationConflicts で検査する
+function conflictsWithPublic(rel, publicPath) {
   if (lstatOrNull(path.join(publicPath, rel)) !== null) return true;
   for (let parent = path.dirname(rel); parent !== '.'; ) {
     const publicParent = path.join(publicPath, parent);
-    if (
-      linkPaths.has(parent) ||
-      lstatOrNull(publicParent)?.isSymbolicLink() ||
-      isFile(publicParent)
-    )
+    if (lstatOrNull(publicParent)?.isSymbolicLink() || isFile(publicParent))
       return true;
     parent = path.dirname(parent);
   }
   return false;
 }
 
-// 入力を読み、記事の配列として返す。不正なバイト列は置換せずにエラーにする
-function readArticles(file) {
-  try {
-    const text = new TextDecoder('utf-8', { fatal: true }).decode(
-      fs.readFileSync(file)
-    );
-    return JSON.parse(text);
-  } catch (e) {
-    fail(`invalid data: ${e.message}`);
+// 入力を検証・分割し、作成するデータファイルとリンクを返す
+function planOutputs(publicPath, outputPath) {
+  const articles = readArticles(publicPath);
+  const dataFiles = buildDataFiles(articles);
+  const linkPaths = articles.map((a) => `${a.path.slice(1)}.html`);
+  for (const rel of linkPaths) {
+    if (!path.resolve(outputPath, rel).startsWith(`${outputPath}/`))
+      throw new DataError(`article path escapes the output directory: ${rel}`);
   }
+  // public/data はコピーしないので、データファイルは public と比較しない
+  const conflicted = [
+    ...findDestinationConflicts([...linkPaths, ...dataFiles.keys()]),
+    ...linkPaths.filter((rel) => conflictsWithPublic(rel, publicPath)),
+  ];
+  if (conflicted.length > 0)
+    throw new DataError(
+      `article destination already exists: ${JSON.stringify(conflicted)}`
+    );
+  return { dataFiles, linkPaths };
 }
 
 let args;
@@ -125,37 +128,14 @@ if (fs.existsSync(outputPath)) {
 if (!isFile(path.join(publicPath, 'index.html')))
   fail(`${publicPath}/index.html not found. run \`pnpm build\` first`);
 
-const articles = readArticles(path.join(publicPath, 'data/codelib_full.json'));
-if (!Array.isArray(articles))
-  fail('invalid data: codelib_full.json must be an array');
-
-const articlePaths = articles.map((a) =>
-  a !== null && typeof a === 'object' ? a.path : undefined
-);
-const invalidPaths = articlePaths.filter((p) => !isValidArticlePath(p));
-if (invalidPaths.length > 0)
-  fail(`invalid article path: ${JSON.stringify(invalidPaths)}`);
-
 // 出力先に触る前に、すべての作成先を検査する
-const linkPaths = articlePaths.map((p) => `${p.slice(1)}.html`);
-for (const rel of linkPaths) {
-  if (!path.resolve(outputPath, rel).startsWith(`${outputPath}/`))
-    fail(`article path escapes the output directory: ${rel}`);
+let plan;
+try {
+  plan = planOutputs(publicPath, outputPath);
+} catch (e) {
+  if (e instanceof DataError) fail(e.message);
+  throw e;
 }
-const seen = new Set();
-const duplicates = new Set(
-  linkPaths.filter((rel) => seen.has(rel) || !seen.add(rel))
-);
-if (duplicates.size > 0)
-  fail(
-    `article destination already exists: ${JSON.stringify([...duplicates])}`
-  );
-const linkPathSet = new Set(linkPaths);
-const conflicted = linkPaths.filter((rel) =>
-  conflicts(rel, linkPathSet, publicPath)
-);
-if (conflicted.length > 0)
-  fail(`article destination already exists: ${JSON.stringify(conflicted)}`);
 
 // 冪等にするため、出力先を空にしてから public の中身をそのままコピーする
 try {
@@ -169,11 +149,24 @@ for (const child of fs.readdirSync(outputPath))
 fs.cpSync(publicPath, outputPath, {
   recursive: true,
   verbatimSymlinks: true,
-  filter: (src) => !EXCLUDED_BASENAMES.has(path.basename(src)),
+  filter: (src) =>
+    !EXCLUDED_BASENAMES.has(path.basename(src)) &&
+    src !== path.join(publicPath, 'data'),
 });
 
+// クライアントの切り替えまでは、分割前の入力も公開する
+const outputFiles = new Map(plan.dataFiles).set(
+  INPUT_FILE,
+  fs.readFileSync(path.join(publicPath, INPUT_FILE))
+);
+for (const [rel, content] of outputFiles) {
+  const dest = path.join(outputPath, rel);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.writeFileSync(dest, content);
+}
+
 const indexPath = path.join(outputPath, 'index.html');
-for (const rel of linkPaths) {
+for (const rel of plan.linkPaths) {
   const dest = path.join(outputPath, rel);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.symlinkSync(path.relative(path.dirname(dest), indexPath), dest);

@@ -26,6 +26,9 @@ Use codeLib2-tools https://github.com/buyoh/codeLib2-tools
 pnpm dev
 ```
 
+`pnpm dev` splits `public/data/codelib_full.json` into `public/data/index.json` and `public/data/articles/**` before starting.
+After regenerating the data while the server is running, run `pnpm split-data`.
+
 check http://localhost:8020/codeLib2
 
 ### release
